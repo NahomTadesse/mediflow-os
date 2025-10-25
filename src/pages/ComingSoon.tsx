@@ -1,4 +1,4 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "../../../mediflow-os/src/components/ui/card";
 import { Construction } from "lucide-react";
 
 interface ComingSoonProps {

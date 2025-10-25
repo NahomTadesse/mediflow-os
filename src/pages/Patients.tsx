@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Search, Plus, Filter } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
+import { Button } from "../../../mediflow-os/src/components/ui/button";
+import { Input } from "../../../mediflow-os/src/components/ui/input";
+import { Card, CardContent } from "../../../mediflow-os/src/components/ui/card";
+import { Avatar, AvatarFallback } from "../../../mediflow-os/src/components/ui/avatar";
+import { Badge } from "../../../mediflow-os/src/components/ui/badge";
 
 const patients = [
   {

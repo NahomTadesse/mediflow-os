@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Search, Plus, Download, AlertTriangle, Package } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "../../../mediflow-os/src/components/ui/button";
+import { Input } from "../../../mediflow-os/src/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "../../../mediflow-os/src/components/ui/card";
+import { Badge } from "../../../mediflow-os/src/components/ui/badge";
+import { Progress } from "../../../mediflow-os/src/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../mediflow-os/src/components/ui/tabs";
 import {
   Table,
   TableBody,
@@ -13,7 +13,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "../../../mediflow-os/src/components/ui/table";
 
 const mockInventory = [
   {
