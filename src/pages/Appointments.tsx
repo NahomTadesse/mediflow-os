@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Calendar as CalendarIcon, Clock, Plus, Search } from "lucide-react";
-import { Button } from "../../../mediflow-os/src/components/ui/button";
-import { Card, CardContent } from "../../../mediflow-os/src/components/ui/card";
-import { Badge } from "../../../mediflow-os/src/components/ui/badge";
-import { Input } from "../../../mediflow-os/src/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../mediflow-os/src/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const appointments = [
   {

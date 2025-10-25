@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Progress } from "../ui/progress";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 
 const departments = [
   { name: "Cardiology", patients: 28, capacity: 40, utilization: 70 },

@@ -1,8 +1,8 @@
 import { Users, Calendar, DollarSign, Activity } from "lucide-react";
-import { StatsCard } from "../../../mediflow-os/src/components/dashboard/StatsCard";
-import { RecentActivity } from "../../../mediflow-os/src/components/dashboard/RecentActivity";
-import { AppointmentsChart } from "../../../mediflow-os/src/components/dashboard/AppointmentsChart";
-import { DepartmentOverview } from "../../../mediflow-os/src/components/dashboard/DepartmentOverview";
+import { StatsCard } from "@/components/dashboard/StatsCard";
+import { RecentActivity } from "@/components/dashboard/RecentActivity";
+import { AppointmentsChart } from "@/components/dashboard/AppointmentsChart";
+import { DepartmentOverview } from "@/components/dashboard/DepartmentOverview";
 
 const Dashboard = () => {
   return (
