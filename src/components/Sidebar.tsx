@@ -13,10 +13,11 @@ import {
   Bell,
   Settings,
   Activity,
+  Bed,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const navigation = [
+const mainNavigation = [
   { name: "Dashboard", href: "/", icon: LayoutDashboard },
   { name: "Patients", href: "/patients", icon: Users },
   { name: "Appointments", href: "/appointments", icon: Calendar },
@@ -27,66 +28,84 @@ const navigation = [
   { name: "Staff & HR", href: "/hr", icon: UserCircle },
   { name: "Finance", href: "/finance", icon: DollarSign },
   { name: "Analytics", href: "/analytics", icon: BarChart3 },
-];
-
-const bottomNavigation = [
-  { name: "Notifications", href: "/notifications", icon: Bell },
-  { name: "Settings", href: "/settings", icon: Settings },
+  { name: "Bed Management", href: "/bed-management", icon: Bed },
 ];
 
 export const Sidebar = () => {
   return (
-    <aside className="w-64 border-r border-border bg-card flex flex-col">
-      {/* Logo */}
-      <div className="h-16 flex items-center px-6 border-b border-border">
-        <Activity className="h-8 w-8 text-primary" />
-        <span className="ml-3 text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-          MedCare ERP
-        </span>
-      </div>
+    <>
+      {/* Main Sidebar - Scrollable */}
+      <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r border-border bg-card">
+        <div className="flex h-full flex-col">
+          {/* Logo */}
+          <div className="flex h-16 items-center border-b border-border px-6">
+            <Activity className="h-8 w-8 text-primary" />
+            <span className="ml-3 text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              MedCare ERP
+            </span>
+          </div>
 
-      {/* Main Navigation */}
-      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-        {navigation.map((item) => (
+          {/* Scrollable Menu */}
+          <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
+            {mainNavigation.map((item) => (
+              <NavLink
+                key={item.name}
+                to={item.href}
+                end={item.href === "/"}
+                className={({ isActive }) =>
+                  cn(
+                    "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
+                    isActive
+                      ? "bg-primary text-primary-foreground shadow-sm"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  )
+                }
+              >
+                <item.icon className="h-5 w-5 flex-shrink-0" />
+                <span>{item.name}</span>
+              </NavLink>
+            ))}
+          </nav>
+        </div>
+      </aside>
+
+      {/* FIXED BOTTOM BAR - Always visible on screen */}
+      <div className="fixed bottom-0 left-0 z-50 w-64 border-r border-t border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80">
+        <div className="space-y-1 px-3 py-4">
           <NavLink
-            key={item.name}
-            to={item.href}
-            end={item.href === "/"}
+            to="/notifications"
             className={({ isActive }) =>
               cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all",
+                "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
                 isActive
                   ? "bg-primary text-primary-foreground shadow-sm"
                   : "text-muted-foreground hover:bg-muted hover:text-foreground"
               )
             }
           >
-            <item.icon className="h-5 w-5 flex-shrink-0" />
-            <span>{item.name}</span>
+            <Bell className="h-5 w-5 flex-shrink-0" />
+            <span>Notifications</span>
           </NavLink>
-        ))}
-      </nav>
 
-      {/* Bottom Navigation */}
-      <div className="px-3 py-4 border-t border-border space-y-1">
-        {bottomNavigation.map((item) => (
           <NavLink
-            key={item.name}
-            to={item.href}
+            to="/settings"
             className={({ isActive }) =>
               cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all",
+                "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
                 isActive
                   ? "bg-primary text-primary-foreground shadow-sm"
                   : "text-muted-foreground hover:bg-muted hover:text-foreground"
               )
             }
           >
-            <item.icon className="h-5 w-5 flex-shrink-0" />
-            <span>{item.name}</span>
+            <Settings className="h-5 w-5 flex-shrink-0" />
+            <span>Settings</span>
           </NavLink>
-        ))}
+        </div>
       </div>
-    </aside>
+
+      {/* Add left padding to main content so it doesn't hide under sidebar */}
+      <div className="w-64 flex-shrink-0" />
+    </>
   );
 };
