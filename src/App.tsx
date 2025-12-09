@@ -17,7 +17,7 @@ import Analytics from "./pages/Analytics";
 import ComingSoon from "./pages/ComingSoon";
 import NotFound from "./pages/NotFound";
 import DarkMode from "./pages/Darkmode";
-
+import BedManagement from "./pages/BedManagement";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -39,6 +39,8 @@ const App = () => (
             <Route path="/hr" element={<HR />} />
             <Route path="/finance" element={<Finance />} />
             <Route path="/analytics" element={<Analytics />} />
+            <Route path="/bed-management" element={<BedManagement />} />
+
             <Route
               path="/notifications"
               element={
