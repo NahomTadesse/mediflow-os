@@ -1,4 +1,3 @@
-// src/components/GlobalChat.tsx
 "use client";
 
 import React, { useState } from "react";
@@ -73,7 +72,6 @@ export default function GlobalChat() {
 
   return (
     <>
-      {/* Floating Button – Bottom Right (Perfect Position) */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed bottom-8 right-8 z-50 w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full shadow-2xl flex items-center justify-center text-white hover:scale-110 transition-all duration-300"
@@ -85,10 +83,8 @@ export default function GlobalChat() {
         )}
       </button>
 
-      {/* Chat Window – Bottom Right (Perfect Spacing) */}
       {isOpen && (
         <div className="fixed bottom-28 right-8 z-50 w-96 h-[620px] bg-white dark:bg-gray-800 rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 flex flex-col overflow-hidden">
-          {/* Header */}
           <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
@@ -111,7 +107,6 @@ export default function GlobalChat() {
             </div>
           </div>
 
-          {/* Messages */}
           <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50 dark:bg-gray-900">
             {messages.map((msg) => (
               <div
