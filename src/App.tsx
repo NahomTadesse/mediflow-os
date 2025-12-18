@@ -16,12 +16,14 @@ import Finance from "./pages/Finance";
 import Analytics from "./pages/Analytics";
 import ComingSoon from "./pages/ComingSoon";
 import NotFound from "./pages/NotFound";
+import DarkMode from "./pages/Darkmode";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
+      <DarkMode />
       <Toaster />
       <Sonner />
       <BrowserRouter>
@@ -49,7 +51,10 @@ const App = () => (
             <Route
               path="/settings"
               element={
-                <ComingSoon title="Settings" description="System configuration and preferences" />
+                <ComingSoon
+                  title="Settings"
+                  description="System configuration and preferences"
+                />
               }
             />
           </Route>
