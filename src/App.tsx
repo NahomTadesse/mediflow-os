@@ -17,13 +17,15 @@ import Analytics from "./pages/Analytics";
 import ComingSoon from "./pages/ComingSoon";
 import NotFound from "./pages/NotFound";
 import DarkMode from "./pages/Darkmode";
+import GlobalChat from "./pages/GlobalChat";
+import HospitalBedManagement from "./pages/HospitalBedManagement";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
+    <DarkMode />
     <TooltipProvider>
-      <DarkMode />
       <Toaster />
       <Sonner />
       <BrowserRouter>
@@ -39,6 +41,8 @@ const App = () => (
             <Route path="/hr" element={<HR />} />
             <Route path="/finance" element={<Finance />} />
             <Route path="/analytics" element={<Analytics />} />
+            <Route path="/bedmanagement" element={<HospitalBedManagement />} />
+
             <Route
               path="/notifications"
               element={
@@ -60,6 +64,7 @@ const App = () => (
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <GlobalChat />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

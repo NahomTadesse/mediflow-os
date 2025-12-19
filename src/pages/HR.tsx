@@ -1,712 +1,290 @@
-// import { useState } from "react";
-// import { Search, Plus, Download, UserCircle, Calendar } from "lucide-react";
-// import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
-// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-// import { Badge } from "@/components/ui/badge";
-// import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-// import {
-//   Table,
-//   TableBody,
-//   TableCell,
-//   TableHead,
-//   TableHeader,
-//   TableRow,
-// } from "@/components/ui/table";
+"use client";
 
-// const mockStaff = [
-//   {
-//     id: "STF-001",
-//     name: "Dr. Sarah Wilson",
-//     role: "Senior Physician",
-//     department: "Cardiology",
-//     email: "sarah.wilson@medcare.com",
-//     phone: "+1 (555) 123-4567",
-//     status: "Active",
-//     shift: "Morning",
-//     attendance: "98.5%",
-//   },
-//   {
-//     id: "STF-002",
-//     name: "Dr. Michael Chen",
-//     role: "Physician",
-//     department: "Internal Medicine",
-//     email: "michael.chen@medcare.com",
-//     phone: "+1 (555) 234-5678",
-//     status: "Active",
-//     shift: "Evening",
-//     attendance: "96.2%",
-//   },
-//   {
-//     id: "STF-003",
-//     name: "Nurse Emily Brown",
-//     role: "Head Nurse",
-//     department: "Emergency",
-//     email: "emily.brown@medcare.com",
-//     phone: "+1 (555) 345-6789",
-//     status: "Active",
-//     shift: "Night",
-//     attendance: "99.1%",
-//   },
-//   {
-//     id: "STF-004",
-//     name: "James Anderson",
-//     role: "Lab Technician",
-//     department: "Laboratory",
-//     email: "james.anderson@medcare.com",
-//     phone: "+1 (555) 456-7890",
-//     status: "On Leave",
-//     shift: "Morning",
-//     attendance: "94.8%",
-//   },
-// ];
-
-// const stats = [
-//   { title: "Total Staff", value: "284", change: "+12 this month" },
-//   { title: "Active Today", value: "247", change: "87% attendance" },
-//   { title: "On Leave", value: "18", change: "6 medical" },
-//   { title: "Open Positions", value: "7", change: "3 urgent" },
-// ];
-
-// const HR = () => {
-//   const [searchQuery, setSearchQuery] = useState("");
-
-//   const filteredStaff = mockStaff.filter(
-//     (staff) =>
-//       staff.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-//       staff.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-//       staff.department.toLowerCase().includes(searchQuery.toLowerCase())
-//   );
-
-//   return (
-//     <div className="p-6 space-y-6">
-//       <div className="flex items-center justify-between">
-//         <div>
-//           <h1 className="text-3xl font-bold">Human Resources</h1>
-//           <p className="text-muted-foreground">
-//             Staff management, scheduling, and payroll
-//           </p>
-//         </div>
-//         <div className="flex gap-2">
-//           <Button variant="outline">
-//             <Calendar className="mr-2 h-4 w-4" />
-//             Schedule
-//           </Button>
-//           <Button variant="outline">
-//             <Download className="mr-2 h-4 w-4" />
-//             Export
-//           </Button>
-//           <Button>
-//             <Plus className="mr-2 h-4 w-4" />
-//             Add Staff
-//           </Button>
-//         </div>
-//       </div>
-
-//       <div className="grid gap-4 md:grid-cols-4">
-//         {stats.map((stat) => (
-//           <Card key={stat.title}>
-//             <CardHeader className="pb-2">
-//               <CardTitle className="text-sm font-medium text-muted-foreground">
-//                 {stat.title}
-//               </CardTitle>
-//             </CardHeader>
-//             <CardContent>
-//               <div className="text-2xl font-bold">{stat.value}</div>
-//               <p className="text-xs text-muted-foreground mt-1">
-//                 {stat.change}
-//               </p>
-//             </CardContent>
-//           </Card>
-//         ))}
-//       </div>
-
-//       <Tabs defaultValue="all" className="space-y-4">
-//         <TabsList>
-//           <TabsTrigger value="all">All Staff</TabsTrigger>
-//           <TabsTrigger value="doctors">Doctors</TabsTrigger>
-//           <TabsTrigger value="nurses">Nurses</TabsTrigger>
-//           <TabsTrigger value="technicians">Technicians</TabsTrigger>
-//           <TabsTrigger value="admin">Admin</TabsTrigger>
-//         </TabsList>
-
-//         <TabsContent value="all" className="space-y-4">
-//           <Card>
-//             <CardHeader>
-//               <div className="flex items-center gap-4">
-//                 <div className="relative flex-1">
-//                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-//                   <Input
-//                     placeholder="Search by name, ID, or department..."
-//                     value={searchQuery}
-//                     onChange={(e) => setSearchQuery(e.target.value)}
-//                     className="pl-10"
-//                   />
-//                 </div>
-//               </div>
-//             </CardHeader>
-//             <CardContent>
-//               <Table>
-//                 <TableHeader>
-//                   <TableRow>
-//                     <TableHead>Staff ID</TableHead>
-//                     <TableHead>Name</TableHead>
-//                     <TableHead>Role</TableHead>
-//                     <TableHead>Department</TableHead>
-//                     <TableHead>Contact</TableHead>
-//                     <TableHead>Shift</TableHead>
-//                     <TableHead>Attendance</TableHead>
-//                     <TableHead>Status</TableHead>
-//                     <TableHead>Actions</TableHead>
-//                   </TableRow>
-//                 </TableHeader>
-//                 <TableBody>
-//                   {filteredStaff.map((staff) => (
-//                     <TableRow key={staff.id}>
-//                       <TableCell className="font-medium">{staff.id}</TableCell>
-//                       <TableCell>
-//                         <div className="font-medium">{staff.name}</div>
-//                       </TableCell>
-//                       <TableCell>{staff.role}</TableCell>
-//                       <TableCell>
-//                         <Badge variant="outline">{staff.department}</Badge>
-//                       </TableCell>
-//                       <TableCell>
-//                         <div className="text-sm">
-//                           <div>{staff.email}</div>
-//                           <div className="text-muted-foreground">{staff.phone}</div>
-//                         </div>
-//                       </TableCell>
-//                       <TableCell>{staff.shift}</TableCell>
-//                       <TableCell>
-//                         <div className="text-sm font-medium">{staff.attendance}</div>
-//                       </TableCell>
-//                       <TableCell>
-//                         <Badge
-//                           variant={
-//                             staff.status === "Active" ? "default" : "secondary"
-//                           }
-//                         >
-//                           {staff.status}
-//                         </Badge>
-//                       </TableCell>
-//                       <TableCell>
-//                         <div className="flex gap-2">
-//                           <Button size="sm" variant="outline">
-//                             <UserCircle className="h-4 w-4 mr-1" />
-//                             View
-//                           </Button>
-//                         </div>
-//                       </TableCell>
-//                     </TableRow>
-//                   ))}
-//                 </TableBody>
-//               </Table>
-//             </CardContent>
-//           </Card>
-//         </TabsContent>
-//       </Tabs>
-//     </div>
-//   );
-// };
-
-// export default HR;
-
-
-
-import { useState } from "react";
-import { Search, Plus, Download, UserCircle, Calendar, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import React, { useState, useEffect, useRef } from "react";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  MessageCircle,
+  X,
+  Send,
+  Bot,
+  Users,
+  Clock,
+  Briefcase,
+  Calendar,
+  FileText,
+} from "lucide-react";
 
-const mockStaff = [
-  {
-    id: "STF-001",
-    name: "Dr. Sarah Wilson",
-    role: "Senior Physician",
-    department: "Cardiology",
-    email: "sarah.wilson@medcare.com",
-    phone: "+1 (555) 123-4567",
-    status: "Active",
-    shift: "Morning",
-    attendance: "98.5%",
-    type: "doctor",
-  },
-  {
-    id: "STF-002",
-    name: "Dr. Michael Chen",
-    role: "Physician",
-    department: "Internal Medicine",
-    email: "michael.chen@medcare.com",
-    phone: "+1 (555) 234-5678",
-    status: "Active",
-    shift: "Evening",
-    attendance: "96.2%",
-    type: "doctor",
-  },
-  {
-    id: "STF-003",
-    name: "Nurse Emily Brown",
-    role: "Head Nurse",
-    department: "Emergency",
-    email: "emily.brown@medcare.com",
-    phone: "+1 (555) 345-6789",
-    status: "Active",
-    shift: "Night",
-    attendance: "99.1%",
-    type: "nurse",
-  },
-  {
-    id: "STF-004",
-    name: "James Anderson",
-    role: "Lab Technician",
-    department: "Laboratory",
-    email: "james.anderson@medcare.com",
-    phone: "+1 (555) 456-7890",
-    status: "On Leave",
-    shift: "Morning",
-    attendance: "94.8%",
-    type: "technician",
-  },
-  {
-    id: "STF-005",
-    name: "Lisa Roberts",
-    role: "HR Manager",
-    department: "Administration",
-    email: "lisa.roberts@medcare.com",
-    phone: "+1 (555) 567-8901",
-    status: "Active",
-    shift: "Morning",
-    attendance: "97.3%",
-    type: "admin",
-  },
-  {
-    id: "STF-006",
-    name: "Dr. Raj Patel",
-    role: "Pediatrician",
-    department: "Pediatrics",
-    email: "raj.patel@medcare.com",
-    phone: "+1 (555) 678-9012",
-    status: "Active",
-    shift: "Morning",
-    attendance: "95.6%",
-    type: "doctor",
-  },
-  {
-    id: "STF-007",
-    name: "Nurse Tom Clark",
-    role: "ICU Nurse",
-    department: "ICU",
-    email: "tom.clark@medcare.com",
-    phone: "+1 (555) 789-0123",
-    status: "Active",
-    shift: "Night",
-    attendance: "98.0%",
-    type: "nurse",
-  },
+interface Message {
+  id: number;
+  text: string;
+  sender: "user" | "bot";
+  time: string;
+}
+
+const quickReplies = [
+  "How do I apply for leave?",
+  "Where can I check my payslip?",
+  "I need to update my personal details",
+  "How to request a training?",
+  "Report a technical issue",
+  "Check my attendance record",
+  "Request equipment",
+  "View company policies",
+  "Schedule performance review",
+  "Submit expense report",
 ];
 
-const stats = [
-  { title: "Total Staff", value: "284", change: "+12 this month" },
-  { title: "Active Today", value: "247", change: "87% attendance" },
-  { title: "On Leave", value: "18", change: "6 medical" },
-  { title: "Open Positions", value: "7", change: "3 urgent" },
-];
+export default function GlobalChat() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: 1,
+      text: "Hello! Welcome to HR Assistant.\nHow can I help you with HR matters today?",
+      sender: "bot",
+      time: new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    },
+  ]);
+  const [input, setInput] = useState("");
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-const HR = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    role: "",
-    department: "",
-    email: "",
-    phone: "",
-    shift: "Morning",
-    status: "Active",
-    type: "doctor",
-  });
+  const sendMessage = (text: string) => {
+    if (!text.trim()) return;
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSelectChange = (name: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newStaff = {
-      id: `STF-${String(mockStaff.length + 1).padStart(3, "0")}`,
-      attendance: "0%",
-      ...formData,
+    const userMsg: Message = {
+      id: messages.length + 1,
+      text,
+      sender: "user",
+      time: new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
     };
-    console.log("New Staff Added:", newStaff);
-    // In real app: push to state or send to API
-    setIsModalOpen(false);
-    setFormData({
-      name: "",
-      role: "",
-      department: "",
-      email: "",
-      phone: "",
-      shift: "Morning",
-      status: "Active",
-      type: "doctor",
-    });
+    setMessages((prev) => [...prev, userMsg]);
+
+    // Simulate HR bot responses
+    setTimeout(() => {
+      const botResponses: Record<string, string> = {
+        "How do I apply for leave?":
+          "Go to Leave Management → Apply Leave. Select type, dates, and submit. Approval takes 24-48 hours.",
+        "Where can I check my payslip?":
+          "Payslips are available in Payroll → My Payslips. They're generated on the 5th of each month.",
+        "I need to update my personal details":
+          "Update personal info in Employee Profile → Personal Details. Emergency contacts can be added there too.",
+        "How to request a training?":
+          "Submit training requests in Training → Request Training. Include course details and justification.",
+        "Report a technical issue":
+          "Please submit IT tickets through IT Portal. Urgent issues? Call IT helpdesk at ext. 555.",
+        "Check my attendance record":
+          "View your attendance in Attendance → My Records. Discrepancies? Contact your manager.",
+        "Request equipment":
+          "Equipment requests go through Assets → Request Equipment. IT equipment needs IT approval.",
+        "View company policies":
+          "All policies are in Documents → Company Policies. Latest updates highlighted in yellow.",
+        "Schedule performance review":
+          "Schedule reviews in Performance → My Reviews. Quarterly reviews are mandatory.",
+        "Submit expense report":
+          "Submit expenses in Finance → Expense Claims. Keep receipts under $50, invoices above.",
+      };
+
+      const defaultResponses = [
+        "I've forwarded your query to the HR department. They'll respond within 24 hours.",
+        "Please check the HR handbook for detailed procedures.",
+        "You can find that information in the Employee Self-Service portal.",
+        "For urgent matters, please contact HR directly at hr@company.com.",
+        "That process requires manager approval first. Please discuss with your supervisor.",
+      ];
+
+      const reply =
+        botResponses[text] ||
+        defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+
+      const botMsg: Message = {
+        id: messages.length + 2,
+        text: reply,
+        sender: "bot",
+        time: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      };
+      setMessages((prev) => [...prev, botMsg]);
+    }, 800);
+
+    setInput("");
   };
 
-  const getFilteredStaff = (type?: string) => {
-    return mockStaff
-      .filter((staff) => !type || staff.type === type)
-      .filter(
-        (staff) =>
-          staff.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          staff.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          staff.department.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-  };
-
-  const renderTable = (data: typeof mockStaff) => (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Staff ID</TableHead>
-          <TableHead>Name</TableHead>
-          <TableHead>Role</TableHead>
-          <TableHead>Department</TableHead>
-          <TableHead>Contact</TableHead>
-          <TableHead>Shift</TableHead>
-          <TableHead>Attendance</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Actions</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {data.map((staff) => (
-          <TableRow key={staff.id}>
-            <TableCell className="font-medium">{staff.id}</TableCell>
-            <TableCell>
-              <div className="font-medium">{staff.name}</div>
-            </TableCell>
-            <TableCell>{staff.role}</TableCell>
-            <TableCell>
-              <Badge variant="outline">{staff.department}</Badge>
-            </TableCell>
-            <TableCell>
-              <div className="text-sm">
-                <div>{staff.email}</div>
-                <div className="text-muted-foreground">{staff.phone}</div>
-              </div>
-            </TableCell>
-            <TableCell>{staff.shift}</TableCell>
-            <TableCell>
-              <div className="text-sm font-medium">{staff.attendance}</div>
-            </TableCell>
-            <TableCell>
-              <Badge
-                variant={staff.status === "Active" ? "default" : "secondary"}
-              >
-                {staff.status}
-              </Badge>
-            </TableCell>
-            <TableCell>
-              <Button size="sm" variant="outline">
-                <UserCircle className="h-4 w-4 mr-1" />
-                View
-              </Button>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  );
+  // Auto-scroll to bottom
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Human Resources</h1>
-          <p className="text-muted-foreground">
-            Staff management, scheduling, and payroll
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline">
-            <Calendar className="mr-2 h-4 w-4" />
-            Schedule
-          </Button>
-          <Button variant="outline">
-            <Download className="mr-2 h-4 w-4" />
-            Export
-          </Button>
+    <>
+      {/* Floating Chat Button */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="fixed bottom-8 right-8 z-[9999] w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full shadow-2xl flex items-center justify-center text-white hover:scale-110 transition-all duration-300 group"
+        aria-label="Open HR Assistant"
+      >
+        {isOpen ? (
+          <X className="w-8 h-8" />
+        ) : (
+          <>
+            <MessageCircle className="w-8 h-8" />
+            {/* Notification dot for new messages */}
+            <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white animate-ping"></span>
+          </>
+        )}
+      </button>
 
-          {/* Add Staff Modal */}
-          <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="mr-2 h-4 w-4" />
-                Add Staff
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="w-full max-w-3xl p-8">
-              <DialogHeader>
-                <DialogTitle className="text-2xl">Add New Staff Member</DialogTitle>
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="absolute right-6 top-6 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                >
-                  <X className="h-5 w-5" />
-                  <span className="sr-only">Close</span>
-                </button>
-              </DialogHeader>
-
-              <form onSubmit={handleSubmit} className="mt-6 space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="name">Full Name</Label>
-                    <Input
-                      id="name"
-                      name="name"
-                      placeholder="Dr. John Doe"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      required
-                      autoFocus
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="role">Role</Label>
-                    <Input
-                      id="role"
-                      name="role"
-                      placeholder="Senior Physician"
-                      value={formData.role}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="department">Department</Label>
-                    <Input
-                      id="department"
-                      name="department"
-                      placeholder="Cardiology"
-                      value={formData.department}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="type">Staff Type</Label>
-                    <Select
-                      value={formData.type}
-                      onValueChange={(v) => handleSelectChange("type", v)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="doctor">Doctor</SelectItem>
-                        <SelectItem value="nurse">Nurse</SelectItem>
-                        <SelectItem value="technician">Technician</SelectItem>
-                        <SelectItem value="admin">Admin</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      placeholder="john@medcare.com"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="phone">Phone</Label>
-                    <Input
-                      id="phone"
-                      name="phone"
-                      type="tel"
-                      placeholder="+1 (555) 000-0000"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="shift">Shift</Label>
-                    <Select
-                      value={formData.shift}
-                      onValueChange={(v) => handleSelectChange("shift", v)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Morning">Morning</SelectItem>
-                        <SelectItem value="Evening">Evening</SelectItem>
-                        <SelectItem value="Night">Night</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="status">Status</Label>
-                    <Select
-                      value={formData.status}
-                      onValueChange={(v) => handleSelectChange("status", v)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Active">Active</SelectItem>
-                        <SelectItem value="On Leave">On Leave</SelectItem>
-                        <SelectItem value="Inactive">Inactive</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+      {/* Chat Window */}
+      {isOpen && (
+        <div className="fixed bottom-28 right-8 z-[9998] w-96 h-[600px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-800 flex flex-col overflow-hidden">
+          {/* Header */}
+          <div className="bg-gradient-to-r from-blue-700 to-indigo-700 p-5 text-white">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                  <Users className="w-6 h-6" />
                 </div>
-
-                <div className="flex justify-end gap-3 pt-4">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => setIsModalOpen(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button type="submit">Add Staff Member</Button>
-                </div>
-              </form>
-            </DialogContent>
-          </Dialog>
-        </div>
-      </div>
-
-      {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-4">
-        {stats.map((stat) => (
-          <Card key={stat.title}>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                {stat.title}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stat.value}</div>
-              <p className="text-xs text-muted-foreground mt-1">{stat.change}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {/* Tabs with Filtered Data */}
-      <Tabs defaultValue="all" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="all">All Staff</TabsTrigger>
-          <TabsTrigger value="doctors">Doctors</TabsTrigger>
-          <TabsTrigger value="nurses">Nurses</TabsTrigger>
-          <TabsTrigger value="technicians">Technicians</TabsTrigger>
-          <TabsTrigger value="admin">Admin</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="all" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center gap-4">
-                <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Search by name, ID, or department..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10"
-                  />
+                <div>
+                  <h3 className="font-bold text-lg">HR Assistant</h3>
+                  <div className="flex items-center gap-2 text-xs opacity-90">
+                    <div className="flex items-center gap-1">
+                      <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                      <span>Live Support</span>
+                    </div>
+                    <span>•</span>
+                    <span>Mon-Fri, 9AM-6PM</span>
+                  </div>
                 </div>
               </div>
-            </CardHeader>
-            <CardContent>{renderTable(getFilteredStaff())}</CardContent>
-          </Card>
-        </TabsContent>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="hover:bg-white/20 rounded-lg p-2 transition"
+                aria-label="Close chat"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
 
-        <TabsContent value="doctors">
-          <Card>
-            <CardHeader>
-              <h3 className="text-lg font-semibold">Doctors</h3>
-            </CardHeader>
-            <CardContent>{renderTable(getFilteredStaff("doctor"))}</CardContent>
-          </Card>
-        </TabsContent>
+          {/* Quick Stats Bar */}
+          <div className="px-4 py-3 bg-blue-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between text-xs">
+              <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
+                <Clock className="w-3 h-3" />
+                <span>Avg. response: 2 min</span>
+              </div>
+              <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
+                <Users className="w-3 h-3" />
+                <span>HR Team Online</span>
+              </div>
+            </div>
+          </div>
 
-        <TabsContent value="nurses">
-          <Card>
-            <CardHeader>
-              <h3 className="text-lg font-semibold">Nurses</h3>
-            </CardHeader>
-            <CardContent>{renderTable(getFilteredStaff("nurse"))}</CardContent>
-          </Card>
-        </TabsContent>
+          {/* Messages */}
+          <div className="flex-1 overflow-y-auto p-6 space-y-4">
+            {messages.map((msg) => (
+              <div
+                key={msg.id}
+                className={`flex ${
+                  msg.sender === "user" ? "justify-end" : "justify-start"
+                }`}
+              >
+                <div
+                  className={`max-w-xs px-4 py-3 rounded-2xl ${
+                    msg.sender === "user"
+                      ? "bg-blue-600 text-white rounded-br-none"
+                      : "bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-bl-none"
+                  }`}
+                >
+                  {msg.sender === "bot" && (
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-6 h-6 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                        <Bot className="w-3 h-3 text-blue-600 dark:text-blue-300" />
+                      </div>
+                      <span className="text-xs font-medium text-blue-600 dark:text-blue-300">
+                        HR Assistant
+                      </span>
+                    </div>
+                  )}
+                  <p className="text-sm whitespace-pre-wrap">{msg.text}</p>
+                  <p
+                    className={`text-xs mt-2 ${
+                      msg.sender === "user"
+                        ? "text-blue-200"
+                        : "text-gray-500 dark:text-gray-400"
+                    }`}
+                  >
+                    {msg.time}
+                  </p>
+                </div>
+              </div>
+            ))}
+            <div ref={messagesEndRef} />
+          </div>
 
-        <TabsContent value="technicians">
-          <Card>
-            <CardHeader>
-              <h3 className="text-lg font-semibold">Technicians</h3>
-            </CardHeader>
-            <CardContent>{renderTable(getFilteredStaff("technician"))}</CardContent>
-          </Card>
-        </TabsContent>
+          {/* Quick Actions */}
+          <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
+              <Briefcase className="w-4 h-4" />
+              Quick HR Actions
+            </h4>
+            <div className="grid grid-cols-2 gap-2">
+              {quickReplies.slice(0, 4).map((reply, i) => (
+                <button
+                  key={i}
+                  onClick={() => sendMessage(reply)}
+                  className="px-3 py-2 bg-white dark:bg-gray-700 hover:bg-blue-50 dark:hover:bg-gray-600 border border-gray-200 dark:border-gray-600 rounded-lg text-xs text-gray-700 dark:text-gray-300 transition-all hover:scale-[1.02]"
+                >
+                  {reply}
+                </button>
+              ))}
+            </div>
+          </div>
 
-        <TabsContent value="admin">
-          <Card>
-            <CardHeader>
-              <h3 className="text-lg font-semibold">Admin Staff</h3>
-            </CardHeader>
-            <CardContent>{renderTable(getFilteredStaff("admin"))}</CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
-    </div>
+          {/* Input Area */}
+          <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyPress={(e) => e.key === "Enter" && sendMessage(input)}
+                placeholder="Ask about HR policies, leave, payroll..."
+                className="flex-1 px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+              <button
+                onClick={() => sendMessage(input)}
+                disabled={!input.trim()}
+                className={`px-4 py-3 rounded-lg font-medium transition-all ${
+                  input.trim()
+                    ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:opacity-90"
+                    : "bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed"
+                }`}
+              >
+                <Send className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="mt-2 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+              <div className="flex items-center gap-4">
+                <button className="hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1">
+                  <Calendar className="w-3 h-3" />
+                  <span>Leave</span>
+                </button>
+                <button className="hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1">
+                  <FileText className="w-3 h-3" />
+                  <span>Documents</span>
+                </button>
+              </div>
+              <span>Press Enter to send</span>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
-};
-
-export default HR;
+}
