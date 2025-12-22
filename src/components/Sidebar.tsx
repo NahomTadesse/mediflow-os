@@ -1,5 +1,5 @@
+// components/Sidebar.tsx
 import { NavLink } from "react-router-dom";
-import { Bed } from "lucide-react";
 import {
   LayoutDashboard,
   Users,
@@ -14,8 +14,12 @@ import {
   Bell,
   Settings,
   Activity,
+  Menu,
+  X,
+  Bed,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useState, useEffect } from "react";
 
 const navigation = [
   { name: "Dashboard", href: "/", icon: LayoutDashboard },
@@ -25,10 +29,10 @@ const navigation = [
   { name: "Billing", href: "/billing", icon: Receipt },
   { name: "Inventory", href: "/inventory", icon: Package },
   { name: "Laboratory", href: "/laboratory", icon: FlaskConical },
+  { name: "Bed Management", href: "/bedmanagement", icon: Bed },
   { name: "Staff & HR", href: "/hr", icon: UserCircle },
   { name: "Finance", href: "/finance", icon: DollarSign },
   { name: "Analytics", href: "/analytics", icon: BarChart3 },
-  { name: "Bed Management", href: "/bedmanagement", icon: Bed },
 ];
 
 const bottomNavigation = [
@@ -37,22 +41,66 @@ const bottomNavigation = [
 ];
 
 export const Sidebar = () => {
-  return (
-    <aside className="w-64 h-screen sticky top-0 flex flex-col border-r border-border bg-card">
-      <div className="h-16 flex items-center px-6 border-b border-border shrink-0">
-        <Activity className="h-8 w-8 text-primary" />
-        <span className="ml-3 text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-          MedCare ERP
-        </span>
-      </div>
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-      <div className="flex-1 flex flex-col overflow-hidden">
+  useEffect(() => {
+    const checkIfMobile = () => {
+      const mobile = window.innerWidth < 1024;
+      setIsMobile(mobile);
+      if (!mobile) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    checkIfMobile();
+    window.addEventListener("resize", checkIfMobile);
+    return () => window.removeEventListener("resize", checkIfMobile);
+  }, []);
+
+  return (
+    <>
+      {/* Mobile Menu Toggle */}
+      {isMobile && (
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="fixed top-4 left-4 z-50 p-3 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
+          aria-label="Toggle menu"
+        >
+          {isMobileMenuOpen ? (
+            <X className="w-6 h-6" />
+          ) : (
+            <Menu className="w-6 h-6" />
+          )}
+        </button>
+      )}
+
+      {/* Sidebar */}
+      <aside
+        className={cn(
+          "fixed inset-y-0 left-0 z-40 w-64 bg-card border-r border-border flex flex-col transition-transform duration-300 ease-in-out",
+          "lg:relative lg:translate-x-0 lg:z-auto",
+          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+        )}
+      >
+        {/* Logo Header */}
+        <div className="h-16 flex items-center justify-center px-6 border-b border-border shrink-0">
+          <div className="flex items-center gap-3">
+            <Activity className="h-8 w-8 text-primary" />
+            <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              MedCare ERP
+            </span>
+          </div>
+        </div>
+
+        {/* Scrollable Main Navigation */}
         <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
           {navigation.map((item) => (
             <NavLink
               key={item.name}
               to={item.href}
               end={item.href === "/"}
+              onClick={() => isMobile && setIsMobileMenuOpen(false)}
               className={({ isActive }) =>
                 cn(
                   "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all",
@@ -68,11 +116,13 @@ export const Sidebar = () => {
           ))}
         </nav>
 
-        <div className="shrink-0 border-t border-border bg-card px-3 py-4 space-y-1 mt-auto">
+        {/* Bottom Navigation - Sticky at bottom of viewport on desktop */}
+        <div className="sticky bottom-0 left-0 right-0 border-t border-border bg-card px-3 py-4 space-y-1 shadow-lg">
           {bottomNavigation.map((item) => (
             <NavLink
               key={item.name}
               to={item.href}
+              onClick={() => isMobile && setIsMobileMenuOpen(false)}
               className={({ isActive }) =>
                 cn(
                   "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all",
@@ -87,7 +137,15 @@ export const Sidebar = () => {
             </NavLink>
           ))}
         </div>
-      </div>
-    </aside>
+      </aside>
+
+      {/* Mobile Overlay */}
+      {isMobileMenuOpen && isMobile && (
+        <div
+          className="fixed inset-0 bg-black/50 z-30 lg:hidden"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+    </>
   );
 };

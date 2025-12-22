@@ -1,602 +1,310 @@
-// import { useState } from "react";
-// import { Calendar as CalendarIcon, Clock, Plus, Search } from "lucide-react";
-// import { Button } from "@/components/ui/button";
-// import { Card, CardContent } from "@/components/ui/card";
-// import { Badge } from "@/components/ui/badge";
-// import { Input } from "@/components/ui/input";
-// import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-// const appointments = [
-//   {
-//     id: "A001",
-//     patientName: "Sarah Johnson",
-//     doctorName: "Dr. Robert Smith",
-//     department: "Cardiology",
-//     time: "09:00 AM",
-//     date: "2024-01-22",
-//     status: "Confirmed",
-//     type: "Consultation",
-//   },
-//   {
-//     id: "A002",
-//     patientName: "Michael Chen",
-//     doctorName: "Dr. Emily Brown",
-//     department: "Orthopedics",
-//     time: "10:30 AM",
-//     date: "2024-01-22",
-//     status: "Confirmed",
-//     type: "Follow-up",
-//   },
-//   {
-//     id: "A003",
-//     patientName: "Emma Davis",
-//     doctorName: "Dr. James Wilson",
-//     department: "Pediatrics",
-//     time: "11:00 AM",
-//     date: "2024-01-22",
-//     status: "Pending",
-//     type: "Check-up",
-//   },
-//   {
-//     id: "A004",
-//     patientName: "James Wilson",
-//     doctorName: "Dr. Sarah Anderson",
-//     department: "Surgery",
-//     time: "02:00 PM",
-//     date: "2024-01-22",
-//     status: "Confirmed",
-//     type: "Pre-op",
-//   },
-//   {
-//     id: "A005",
-//     patientName: "Lisa Anderson",
-//     doctorName: "Dr. Michael Davis",
-//     department: "Emergency",
-//     time: "03:30 PM",
-//     date: "2024-01-22",
-//     status: "In Progress",
-//     type: "Emergency",
-//   },
-// ];
-
-// const statusColors: Record<string, string> = {
-//   Confirmed: "bg-success/10 text-success",
-//   Pending: "bg-warning/10 text-warning",
-//   "In Progress": "bg-info/10 text-info",
-//   Completed: "bg-muted text-muted-foreground",
-//   Cancelled: "bg-error/10 text-error",
-// };
-
-// const Appointments = () => {
-//   const [searchQuery, setSearchQuery] = useState("");
-
-//   const filteredAppointments = appointments.filter(
-//     (apt) =>
-//       apt.patientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-//       apt.doctorName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-//       apt.department.toLowerCase().includes(searchQuery.toLowerCase())
-//   );
-
-//   return (
-//     <div className="p-8 space-y-6">
-//       {/* Header */}
-//       <div className="flex items-center justify-between">
-//         <div>
-//           <h1 className="text-3xl font-bold">Appointments</h1>
-//           <p className="text-muted-foreground mt-1">
-//             Schedule and manage patient appointments
-//           </p>
-//         </div>
-//         <Button className="gap-2">
-//           <Plus className="h-4 w-4" />
-//           New Appointment
-//         </Button>
-//       </div>
-
-//       {/* Search Bar */}
-//       <Card className="shadow-soft">
-//         <CardContent className="p-4">
-//           <div className="relative">
-//             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-//             <Input
-//               placeholder="Search by patient, doctor, or department..."
-//               value={searchQuery}
-//               onChange={(e) => setSearchQuery(e.target.value)}
-//               className="pl-10"
-//             />
-//           </div>
-//         </CardContent>
-//       </Card>
-
-//       {/* Tabs */}
-//       <Tabs defaultValue="today" className="space-y-6">
-//         <TabsList>
-//           <TabsTrigger value="today">Today</TabsTrigger>
-//           <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
-//           <TabsTrigger value="past">Past</TabsTrigger>
-//         </TabsList>
-
-//         <TabsContent value="today" className="space-y-4">
-//           {filteredAppointments.map((appointment) => (
-//             <Card
-//               key={appointment.id}
-//               className="shadow-soft hover:shadow-lg transition-shadow"
-//             >
-//               <CardContent className="p-6">
-//                 <div className="flex items-start justify-between">
-//                   <div className="flex-1 space-y-3">
-//                     <div className="flex items-center gap-4">
-//                       <Badge className={statusColors[appointment.status]}>
-//                         {appointment.status}
-//                       </Badge>
-//                       <Badge variant="outline">{appointment.type}</Badge>
-//                     </div>
-
-//                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-//                       <div>
-//                         <p className="text-sm text-muted-foreground">Patient</p>
-//                         <p className="font-semibold">{appointment.patientName}</p>
-//                         <p className="text-sm text-muted-foreground">{appointment.id}</p>
-//                       </div>
-
-//                       <div>
-//                         <p className="text-sm text-muted-foreground">Doctor</p>
-//                         <p className="font-medium">{appointment.doctorName}</p>
-//                         <p className="text-sm text-muted-foreground">
-//                           {appointment.department}
-//                         </p>
-//                       </div>
-
-//                       <div>
-//                         <p className="text-sm text-muted-foreground">Date & Time</p>
-//                         <div className="flex items-center gap-2 mt-1">
-//                           <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-//                           <span className="font-medium">{appointment.date}</span>
-//                         </div>
-//                         <div className="flex items-center gap-2 mt-1">
-//                           <Clock className="h-4 w-4 text-muted-foreground" />
-//                           <span className="font-medium">{appointment.time}</span>
-//                         </div>
-//                       </div>
-
-//                       <div className="flex items-center justify-end gap-2">
-//                         <Button variant="outline" size="sm">
-//                           Reschedule
-//                         </Button>
-//                         <Button size="sm">View Details</Button>
-//                       </div>
-//                     </div>
-//                   </div>
-//                 </div>
-//               </CardContent>
-//             </Card>
-//           ))}
-//         </TabsContent>
-
-//         <TabsContent value="upcoming">
-//           <Card className="shadow-soft">
-//             <CardContent className="p-12 text-center">
-//               <CalendarIcon className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-//               <p className="text-muted-foreground">No upcoming appointments</p>
-//             </CardContent>
-//           </Card>
-//         </TabsContent>
-
-//         <TabsContent value="past">
-//           <Card className="shadow-soft">
-//             <CardContent className="p-12 text-center">
-//               <CalendarIcon className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-//               <p className="text-muted-foreground">No past appointments</p>
-//             </CardContent>
-//           </Card>
-//         </TabsContent>
-//       </Tabs>
-//     </div>
-//   );
-// };
-
-// export default Appointments;
-
+// pages/Appointments.tsx
+"use client";
 
 import { useState } from "react";
 import {
-  Calendar as CalendarIcon,
-  Clock,
-  Plus,
   Search,
-  X,
+  Plus,
+  Bell,
+  Calendar,
+  Clock,
   User,
-  Stethoscope,
+  Video,
+  Phone,
+  MoreVertical,
+  AlertCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
-const appointments = [
-  {
-    id: "A001",
-    patientName: "Sarah Johnson",
-    doctorName: "Dr. Robert Smith",
-    department: "Cardiology",
-    time: "09:00 AM",
-    date: "2024-01-22",
-    status: "Confirmed",
-    type: "Consultation",
-  },
-  {
-    id: "A002",
-    patientName: "Michael Chen",
-    doctorName: "Dr. Emily Brown",
-    department: "Orthopedics",
-    time: "10:30 AM",
-    date: "2024-01-22",
-    status: "Confirmed",
-    type: "Follow-up",
-  },
-  {
-    id: "A003",
-    patientName: "Emma Davis",
-    doctorName: "Dr. James Wilson",
-    department: "Pediatrics",
-    time: "11:00 AM",
-    date: "2024-01-22",
-    status: "Pending",
-    type: "Check-up",
-  },
-  {
-    id: "A004",
-    patientName: "James Wilson",
-    doctorName: "Dr. Sarah Anderson",
-    department: "Surgery",
-    time: "02:00 PM",
-    date: "2024-01-22",
-    status: "Confirmed",
-    type: "Pre-op",
-  },
-  {
-    id: "A005",
-    patientName: "Lisa Anderson",
-    doctorName: "Dr. Michael Davis",
-    department: "Emergency",
-    time: "03:30 PM",
-    date: "2024-01-22",
-    status: "In Progress",
-    type: "Emergency",
-  },
-];
-
-const statusColors: Record<string, string> = {
-  Confirmed: "bg-success/10 text-success",
-  Pending: "bg-warning/10 text-warning",
-  "In Progress": "bg-info/10 text-info",
-  Completed: "bg-muted text-muted-foreground",
-  Cancelled: "bg-error/10 text-error",
+type Appointment = {
+  id: number;
+  time: string;
+  patient: string;
+  type: string;
+  doctor: string;
+  status?: "confirmed" | "pending";
+  date?: string; // optional for upcoming/past
 };
 
-const Appointments = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    patientName: "",
-    doctorName: "",
-    department: "",
-    date: "",
-    time: "",
-    type: "Consultation",
-    notes: "",
-  });
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSelectChange = (name: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newAppointment = {
-      id: `A${String(appointments.length + 1).padStart(3, "0")}`,
-      status: "Pending",
-      ...formData,
-    };
-    console.log("New Appointment:", newAppointment);
-    setIsModalOpen(false);
-    setFormData({
-      patientName: "",
-      doctorName: "",
-      department: "",
-      date: "",
-      time: "",
+const appointments: Record<"today" | "upcoming" | "past", Appointment[]> = {
+  today: [
+    {
+      id: 1,
+      time: "09:00 AM",
+      patient: "John Doe",
       type: "Consultation",
-      notes: "",
-    });
-  };
+      doctor: "Dr. Smith",
+      status: "confirmed",
+    },
+    {
+      id: 2,
+      time: "10:30 AM",
+      patient: "Jane Smith",
+      type: "Follow-up",
+      doctor: "Dr. Johnson",
+      status: "confirmed",
+    },
+    {
+      id: 3,
+      time: "02:00 PM",
+      patient: "Robert Chen",
+      type: "Check-up",
+      doctor: "Dr. Williams",
+      status: "pending",
+    },
+  ],
+  upcoming: [
+    {
+      id: 4,
+      date: "Tomorrow",
+      time: "11:00 AM",
+      patient: "Sarah Wilson",
+      type: "Consultation",
+      doctor: "Dr. Brown",
+    },
+    {
+      id: 5,
+      date: "Jan 20",
+      time: "03:30 PM",
+      patient: "Mike Taylor",
+      type: "Surgery",
+      doctor: "Dr. Davis",
+    },
+  ],
+  past: [
+    {
+      id: 6,
+      date: "Jan 12",
+      time: "10:00 AM",
+      patient: "Emma Johnson",
+      type: "Check-up",
+      doctor: "Dr. Miller",
+    },
+  ],
+};
 
-  const filteredAppointments = appointments.filter(
-    (apt) =>
-      apt.patientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      apt.doctorName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      apt.department.toLowerCase().includes(searchQuery.toLowerCase())
+const stats = [
+  { title: "Today's Appointments", value: "42", change: "+12% vs yesterday" },
+  { title: "This Week", value: "284", change: "+8% vs last week" },
+  { title: "Attendance Rate", value: "92%", change: "+3% this month" },
+  { title: "Pending Confirmation", value: "12", change: "-5 from yesterday" },
+];
+
+const recentAlerts = [
+  { title: "New Appointment Scheduled", time: "5 min ago", type: "info" },
+  { title: "Patient No-Show Alert", time: "20 min ago", type: "warning" },
+  { title: "Appointment Rescheduled", time: "1 hour ago", type: "success" },
+];
+
+export default function Appointments() {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Currently showing only today — you can add tabs later
+  const currentAppointments = appointments.today;
+
+  const filteredAppointments = currentAppointments.filter(
+    (appt) =>
+      appt.patient.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      appt.doctor.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
-    <div className="p-8 space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Appointments</h1>
-          <p className="text-muted-foreground mt-1">
-            Schedule and manage patient appointments
-          </p>
-        </div>
-
-        {/* New Appointment Modal */}
-        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-          <DialogTrigger asChild>
-            <Button className="gap-2">
-              <Plus className="h-4 w-4" />
-              New Appointment
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="w-full max-w-3xl p-8">
-            <DialogHeader>
-              <DialogTitle className="text-2xl">New Appointment</DialogTitle>
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="absolute right-6 top-6 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-              >
-                <X className="h-5 w-5" />
-                <span className="sr-only">Close</span>
-              </button>
-            </DialogHeader>
-
-            <form onSubmit={handleSubmit} className="mt-6 space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="patientName">Patient Name</Label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      id="patientName"
-                      name="patientName"
-                      placeholder="Sarah Johnson"
-                      value={formData.patientName}
-                      onChange={handleInputChange}
-                      className="pl-10"
-                      required
-                      autoFocus
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="doctorName">Doctor</Label>
-                  <div className="relative">
-                    <Stethoscope className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      id="doctorName"
-                      name="doctorName"
-                      placeholder="Dr. Robert Smith"
-                      value={formData.doctorName}
-                      onChange={handleInputChange}
-                      className="pl-10"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="department">Department</Label>
-                  <Select
-                    value={formData.department}
-                    onValueChange={(v) => handleSelectChange("department", v)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select department" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Cardiology">Cardiology</SelectItem>
-                      <SelectItem value="Orthopedics">Orthopedics</SelectItem>
-                      <SelectItem value="Pediatrics">Pediatrics</SelectItem>
-                      <SelectItem value="Surgery">Surgery</SelectItem>
-                      <SelectItem value="Emergency">Emergency</SelectItem>
-                      <SelectItem value="Neurology">Neurology</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="date">Date</Label>
-                  <Input
-                    id="date"
-                    name="date"
-                    type="date"
-                    value={formData.date}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="time">Time</Label>
-                  <Input
-                    id="time"
-                    name="time"
-                    type="time"
-                    value={formData.time}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="type">Appointment Type</Label>
-                  <Select
-                    value={formData.type}
-                    onValueChange={(v) => handleSelectChange("type", v)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Consultation">Consultation</SelectItem>
-                      <SelectItem value="Follow-up">Follow-up</SelectItem>
-                      <SelectItem value="Check-up">Check-up</SelectItem>
-                      <SelectItem value="Pre-op">Pre-op</SelectItem>
-                      <SelectItem value="Emergency">Emergency</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+    <div className="min-h-screen bg-gray-50">
+      <div className="pt-16 lg:pt-0 p-3 sm:p-4 md:p-6">
+        <div className="max-w-7xl mx-auto">
+          {/* Desktop Header - No buttons */}
+          <header className="hidden lg:block mb-4 sm:mb-6 md:mb-8">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">
+                  Appointments
+                </h1>
+                <p className="text-sm sm:text-base text-muted-foreground mt-1">
+                  Manage and schedule patient appointments
+                </p>
               </div>
+            </div>
+          </header>
 
-              <div className="space-y-2">
-                <Label htmlFor="notes">Notes (Optional)</Label>
-                <textarea
-                  id="notes"
-                  name="notes"
-                  placeholder="Any special instructions or symptoms..."
-                  value={formData.notes}
-                  onChange={handleInputChange}
-                  className="min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                />
+          {/* Mobile Header - Only Alerts button */}
+          <header className="lg:hidden mb-4 sm:mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="pl-12 -mt-12">
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+                  Appointments
+                </h1>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Manage patient appointments
+                </p>
               </div>
-
-              <div className="flex justify-end gap-3 pt-4">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setIsModalOpen(false)}
-                >
-                  Cancel
+              <div className="flex items-center gap-2">
+                <Button variant="outline" size="sm" className="text-xs">
+                  <Bell className="w-3 h-3 mr-1" />
+                  Alerts
                 </Button>
-                <Button type="submit">Schedule Appointment</Button>
               </div>
-            </form>
-          </DialogContent>
-        </Dialog>
-      </div>
+            </div>
+          </header>
 
-      {/* Search Bar */}
-      <Card className="shadow-soft">
-        <CardContent className="p-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search by patient, doctor, or department..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-        </CardContent>
-      </Card>
+          {/* Main Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+            {/* Left Column */}
+            <div className="lg:col-span-2 space-y-4 sm:space-y-6">
+              {/* Stats Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                {stats.map((stat) => (
+                  <Card key={stat.title}>
+                    <CardContent className="p-4 sm:p-6">
+                      <p className="text-xs sm:text-sm font-medium text-gray-600">
+                        {stat.title}
+                      </p>
+                      <p className="text-xl sm:text-2xl font-bold mt-1 sm:mt-2">
+                        {stat.value}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        {stat.change}
+                      </p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
 
-      {/* Tabs - Original Behavior Preserved */}
-      <Tabs defaultValue="today" className="space-y-6">
-        <TabsList>
-          <TabsTrigger value="today">Today</TabsTrigger>
-          <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
-          <TabsTrigger value="past">Past</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="today" className="space-y-4">
-          {filteredAppointments.map((appointment) => (
-            <Card
-              key={appointment.id}
-              className="shadow-soft hover:shadow-lg transition-shadow"
-            >
-              <CardContent className="p-6">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1 space-y-3">
-                    <div className="flex items-center gap-4">
-                      <Badge className={statusColors[appointment.status]}>
-                        {appointment.status}
-                      </Badge>
-                      <Badge variant="outline">{appointment.type}</Badge>
+              {/* Search & Appointments List */}
+              <Card>
+                <CardHeader className="pb-4">
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="relative flex-1">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <Input
+                        placeholder="Search appointments by patient or doctor..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="pl-10"
+                      />
                     </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                      <div>
-                        <p className="text-sm text-muted-foreground">Patient</p>
-                        <p className="font-semibold">{appointment.patientName}</p>
-                        <p className="text-sm text-muted-foreground">{appointment.id}</p>
-                      </div>
-
-                      <div>
-                        <p className="text-sm text-muted-foreground">Doctor</p>
-                        <p className="font-medium">{appointment.doctorName}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {appointment.department}
-                        </p>
-                      </div>
-
-                      <div>
-                        <p className="text-sm text-muted-foreground">Date & Time</p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-                          <span className="font-medium">{appointment.date}</span>
-                        </div>
-                        <div className="flex items-center gap-2 mt-1">
-                          <Clock className="h-4 w-4 text-muted-foreground" />
-                          <span className="font-medium">{appointment.time}</span>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center justify-end gap-2">
-                        <Button variant="outline" size="sm">
-                          Reschedule
-                        </Button>
-                        <Button size="sm">View Details</Button>
-                      </div>
-                    </div>
+                    <Button>
+                      <Plus className="h-4 w-4 mr-2" />
+                      New Appointment
+                    </Button>
                   </div>
-                </div>
-              </CardContent>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {filteredAppointments.map((appt) => (
+                      <Card
+                        key={appt.id}
+                        className="hover:shadow-md transition-shadow"
+                      >
+                        <CardContent className="p-4 sm:p-6">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div className="flex items-start gap-3 sm:gap-4">
+                              <div className="p-2 sm:p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg flex-shrink-0">
+                                <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 dark:text-blue-400" />
+                              </div>
+                              <div>
+                                <div className="flex flex-wrap items-center gap-2 mb-2">
+                                  <h3 className="font-semibold text-base sm:text-lg">
+                                    {appt.patient}
+                                  </h3>
+                                  <Badge variant="outline">{appt.type}</Badge>
+                                  {appt.status && (
+                                    <Badge
+                                      className={`${
+                                        appt.status === "confirmed"
+                                          ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
+                                          : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300"
+                                      }`}
+                                    >
+                                      {appt.status}
+                                    </Badge>
+                                  )}
+                                </div>
+                                <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                  <div className="flex items-center gap-1">
+                                    <Clock className="w-4 h-4" />
+                                    {appt.time}
+                                    {appt.date && (
+                                      <span className="ml-1">
+                                        • {appt.date}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div className="flex items-center gap-1">
+                                    <User className="w-4 h-4" />
+                                    {appt.doctor}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
 
-            </Card>
-          ))}
-        </TabsContent>
+                            <div className="flex items-center gap-2 self-start sm:self-center">
+                              <Button size="sm" variant="outline">
+                                <Video className="w-4 h-4 mr-1" />
+                                <span className="hidden sm:inline">Video</span>
+                              </Button>
+                              <Button size="sm" variant="outline">
+                                <Phone className="w-4 h-4 mr-1" />
+                                <span className="hidden sm:inline">Call</span>
+                              </Button>
+                              <Button size="sm" variant="ghost">
+                                <MoreVertical className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
 
-        <TabsContent value="upcoming">
-          <Card className="shadow-soft">
-            <CardContent className="p-12 text-center">
-              <CalendarIcon className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <p className="text-muted-foreground">No upcoming appointments</p>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="past">
-          <Card className="shadow-soft">
-            <CardContent className="p-12 text-center">
-              <CalendarIcon className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <p className="text-muted-foreground">No past appointments</p>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+            {/* Right Column - Recent Alerts Only */}
+            <div className="space-y-4 sm:space-y-6">
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5" />
+                    Recent Alerts
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {recentAlerts.map((alert, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-2 hover:bg-gray-50 rounded-lg"
+                      >
+                        <div>
+                          <p className="text-xs sm:text-sm font-medium">
+                            {alert.title}
+                          </p>
+                          <p className="text-xs text-gray-500">{alert.time}</p>
+                        </div>
+                        <Badge
+                          variant={
+                            alert.type === "success"
+                              ? "default"
+                              : alert.type === "warning"
+                              ? "destructive"
+                              : "secondary"
+                          }
+                          className="text-xs"
+                        >
+                          {alert.type}
+                        </Badge>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
-};
-
-export default Appointments;
+}
