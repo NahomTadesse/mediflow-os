@@ -1,7 +1,22 @@
 import { Outlet } from "react-router-dom";
 import { Sidebar } from "./Sidebar";
+import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
 export const Layout = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    checkIfMobile();
+    window.addEventListener("resize", checkIfMobile);
+
+    return () => window.removeEventListener("resize", checkIfMobile);
+  }, []);
+
   return (
     <div className="flex min-h-screen w-full bg-background">
       {/* Sidebar - Fixed width */}

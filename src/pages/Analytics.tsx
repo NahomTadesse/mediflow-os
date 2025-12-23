@@ -1,226 +1,354 @@
-import { Download, TrendingUp, Users, Calendar, DollarSign } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+"use client";
+
+import { useState } from "react";
 import {
-  LineChart,
-  Line,
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-  Cell,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
-
-const patientFlowData = [
-  { month: "May", patients: 324 },
-  { month: "Jun", patients: 398 },
-  { month: "Jul", patients: 445 },
-  { month: "Aug", patients: 512 },
-  { month: "Sep", patients: 478 },
-  { month: "Oct", patients: 589 },
-];
-
-const revenueData = [
-  { month: "May", revenue: 184500 },
-  { month: "Jun", revenue: 225800 },
-  { month: "Jul", revenue: 198400 },
-  { month: "Aug", revenue: 267300 },
-  { month: "Sep", revenue: 245600 },
-  { month: "Oct", revenue: 284500 },
-];
-
-const departmentData = [
-  { name: "Cardiology", value: 28, color: "hsl(var(--primary))" },
-  { name: "Emergency", value: 22, color: "hsl(var(--secondary))" },
-  { name: "Pediatrics", value: 18, color: "hsl(var(--accent))" },
-  { name: "Orthopedics", value: 15, color: "hsl(var(--muted))" },
-  { name: "Other", value: 17, color: "hsl(var(--border))" },
-];
+  Search,
+  Download,
+  Bell,
+  TrendingUp,
+  Users,
+  Calendar,
+  DollarSign,
+  Activity,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const stats = [
-  { title: "Total Patients", value: "8,547", change: "+12.5%", icon: Users },
-  { title: "Appointments", value: "2,847", change: "+8.2%", icon: Calendar },
-  { title: "Revenue", value: "$1.28M", change: "+18.4%", icon: DollarSign },
-  { title: "Growth Rate", value: "23.1%", change: "+4.3%", icon: TrendingUp },
+  {
+    title: "Total Patients",
+    value: "8,547",
+    change: "+12.5% from last month",
+    icon: Users,
+  },
+  {
+    title: "Appointments",
+    value: "2,847",
+    change: "+8.2% growth",
+    icon: Calendar,
+  },
+  {
+    title: "Revenue",
+    value: "$1.28M",
+    change: "+18.4% increase",
+    icon: DollarSign,
+  },
+  {
+    title: "Growth Rate",
+    value: "23.1%",
+    change: "+4.3% points",
+    icon: TrendingUp,
+  },
 ];
 
-const Analytics = () => {
+const recentAlerts = [
+  { title: "New Analytics Report", time: "5 min ago", type: "info" },
+  { title: "Revenue Peak Detected", time: "30 min ago", type: "success" },
+  { title: "Patient Flow Alert", time: "1 hour ago", type: "warning" },
+];
+
+const kpiMetrics = [
+  {
+    name: "Patient Satisfaction",
+    value: "94.5%",
+    description: "Based on 2,847 surveys",
+    trend: "up",
+  },
+  {
+    name: "Average Wait Time",
+    value: "18 min",
+    description: "For appointments",
+    trend: "down",
+  },
+  {
+    name: "Bed Occupancy Rate",
+    value: "82%",
+    description: "Current utilization",
+    trend: "stable",
+  },
+  {
+    name: "Staff Efficiency",
+    value: "8.4",
+    description: "Patients per staff",
+    trend: "up",
+  },
+];
+
+const departmentPerformance = [
+  { name: "Cardiology", patients: 1240, growth: "+12%", efficiency: "92%" },
+  { name: "Emergency", patients: 980, growth: "+18%", efficiency: "88%" },
+  { name: "Pediatrics", patients: 1560, growth: "+8%", efficiency: "94%" },
+  { name: "Orthopedics", patients: 890, growth: "+15%", efficiency: "85%" },
+  { name: "Dermatology", patients: 670, growth: "+5%", efficiency: "78%" },
+];
+
+const revenueTrends = [
+  { month: "May", revenue: 184500, patients: 324 },
+  { month: "Jun", revenue: 225800, patients: 398 },
+  { month: "Jul", revenue: 198400, patients: 445 },
+  { month: "Aug", revenue: 267300, patients: 512 },
+  { month: "Sep", revenue: 245600, patients: 478 },
+  { month: "Oct", revenue: 284500, patients: 589 },
+];
+
+export default function Analytics() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeTab, setActiveTab] = useState("overview");
+
+  const filteredDepartments = departmentPerformance.filter((dept) =>
+    dept.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Analytics & Reports</h1>
-          <p className="text-muted-foreground">
-            Data insights and performance metrics
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline">
-            <Download className="mr-2 h-4 w-4" />
-            Export Analytics Report
-          </Button>
-        </div>
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-4">
-        {stats.map((stat) => (
-          <Card key={stat.title}>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground flex items-center justify-between">
-                {stat.title}
-                <stat.icon className="h-4 w-4" />
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stat.value}</div>
-              <div className="flex items-center gap-1 mt-1">
-                <TrendingUp className="h-4 w-4 text-primary" />
-                <span className="text-xs text-primary">{stat.change}</span>
+    <div className="min-h-screen bg-gray-50">
+      <div className="pt-16 lg:pt-0 p-3 sm:p-4 md:p-6">
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <header className="hidden lg:block mb-4 sm:mb-6 md:mb-8">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">
+                  Analytics & Reports
+                </h1>
+                <p className="text-sm sm:text-base text-gray-600 mt-1">
+                  Data insights and performance metrics
+                </p>
               </div>
-            </CardContent>
-          </Card>
-        ))}
+            </div>
+          </header>
+
+          {/* Mobile Header */}
+          <header className="lg:hidden mb-4 sm:mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="pl-12 -mt-12">
+                <h1 className="text-2xl sm:text-2xl font-bold text-gray-900">
+                  Analytics
+                </h1>
+                <p className="text-sm text-gray-600 mt-1">
+                  Data insights & metrics
+                </p>
+              </div>
+            </div>
+          </header>
+
+          {/* Main Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+            {/* Left Column */}
+            <div className="lg:col-span-2 space-y-4 sm:space-y-6">
+              {/* Stats Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                {stats.map((stat) => (
+                  <Card key={stat.title}>
+                    <CardContent className="p-4 sm:p-6">
+                      <div className="flex items-start justify-between mb-2">
+                        <p className="text-xs sm:text-sm font-medium text-gray-600">
+                          {stat.title}
+                        </p>
+                        <div className="p-1.5 bg-primary/10 rounded-md">
+                          <stat.icon className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
+                        </div>
+                      </div>
+                      <p className="text-xl sm:text-2xl font-bold mt-1 sm:mt-2">
+                        {stat.value}
+                      </p>
+                      <div className="flex items-center gap-1 mt-1">
+                        <TrendingUp className="h-3 w-3 text-green-600" />
+                        <p className="text-xs text-green-600">{stat.change}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              {/* Search & Analytics Tabs */}
+              <Card>
+                <CardHeader className="pb-4">
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="relative flex-1">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <Input
+                        placeholder="Search departments or metrics..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="pl-10"
+                      />
+                    </div>
+                    <Button variant="outline">
+                      <Download className="h-4 w-4 mr-2" />
+                      Export Report
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <Tabs defaultValue="overview" className="space-y-4">
+                    <TabsList className="grid grid-cols-2 sm:grid-cols-4">
+                      <TabsTrigger value="overview">Overview</TabsTrigger>
+                      <TabsTrigger value="departments">Departments</TabsTrigger>
+                      <TabsTrigger value="financial">Financial</TabsTrigger>
+                      <TabsTrigger value="performance">Performance</TabsTrigger>
+                    </TabsList>
+
+                    <TabsContent value="overview" className="space-y-4">
+                      {/* KPI Metrics */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {kpiMetrics.map((kpi) => (
+                          <Card key={kpi.name}>
+                            <CardContent className="p-4 sm:p-6">
+                              <div className="flex items-start justify-between mb-2">
+                                <div>
+                                  <h3 className="font-semibold text-sm sm:text-base">
+                                    {kpi.name}
+                                  </h3>
+                                  <p className="text-xs text-gray-600">
+                                    {kpi.description}
+                                  </p>
+                                </div>
+                                <Badge
+                                  className={
+                                    kpi.trend === "up"
+                                      ? "bg-green-100 text-green-800"
+                                      : kpi.trend === "down"
+                                      ? "bg-red-100 text-red-800"
+                                      : "bg-yellow-100 text-yellow-800"
+                                  }
+                                >
+                                  {kpi.trend}
+                                </Badge>
+                              </div>
+                              <p className="text-xl sm:text-2xl font-bold mt-2">
+                                {kpi.value}
+                              </p>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+
+                      {/* Revenue Trends */}
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="text-base sm:text-lg">
+                            Revenue Trends (Last 6 Months)
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-3">
+                            {revenueTrends.map((month, index) => (
+                              <div
+                                key={index}
+                                className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg"
+                              >
+                                <div>
+                                  <h3 className="font-semibold text-sm sm:text-base">
+                                    {month.month}
+                                  </h3>
+                                  <p className="text-xs text-gray-600">
+                                    {month.patients} patients
+                                  </p>
+                                </div>
+                                <div className="text-right">
+                                  <p className="font-bold text-sm sm:text-base">
+                                    ${(month.revenue / 1000).toFixed(0)}K
+                                  </p>
+                                  <p className="text-xs text-primary">
+                                    Revenue
+                                  </p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </TabsContent>
+
+                    <TabsContent value="departments" className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {filteredDepartments.map((dept) => (
+                          <Card key={dept.name}>
+                            <CardContent className="p-4 sm:p-6">
+                              <div className="flex items-start justify-between mb-4">
+                                <div>
+                                  <h3 className="font-semibold text-base sm:text-lg">
+                                    {dept.name}
+                                  </h3>
+                                  <p className="text-sm text-gray-600">
+                                    Department Performance
+                                  </p>
+                                </div>
+                                <Badge className="bg-blue-100 text-blue-800">
+                                  {dept.growth}
+                                </Badge>
+                              </div>
+
+                              <div className="grid grid-cols-2 gap-3 text-sm text-gray-600">
+                                <div>Total Patients</div>
+                                <div className="text-right">
+                                  {dept.patients}
+                                </div>
+                                <div>Efficiency</div>
+                                <div className="text-right">
+                                  {dept.efficiency}
+                                </div>
+                              </div>
+
+                              <div className="flex gap-2 mt-4">
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="flex-1"
+                                >
+                                  View Details
+                                </Button>
+                                <Button size="sm" className="flex-1">
+                                  Generate Report
+                                </Button>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    </TabsContent>
+                  </Tabs>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Right Column - Only Recent Alerts */}
+            <div className="space-y-4 sm:space-y-6">
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+                    <Bell className="w-4 h-4 sm:w-5 sm:h-5" />
+                    Recent Alerts
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {recentAlerts.map((alert, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-2 hover:bg-gray-50 rounded-lg"
+                      >
+                        <div>
+                          <p className="text-xs sm:text-sm font-medium">
+                            {alert.title}
+                          </p>
+                          <p className="text-xs text-gray-500">{alert.time}</p>
+                        </div>
+                        <Badge variant={alert.type as any} className="text-xs">
+                          {alert.type}
+                        </Badge>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="patients">Patient Analytics</TabsTrigger>
-          <TabsTrigger value="financial">Financial Analytics</TabsTrigger>
-          <TabsTrigger value="operations">Operational Metrics</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="overview" className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Patient Flow Trends</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={patientFlowData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="month" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Line
-                      type="monotone"
-                      dataKey="patients"
-                      stroke="hsl(var(--primary))"
-                      strokeWidth={2}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Revenue Growth</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={revenueData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="month" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey="revenue" fill="hsl(var(--primary))" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Department Distribution</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <PieChart>
-                    <Pie
-                      data={departmentData}
-                      cx="50%"
-                      cy="50%"
-                      labelLine={false}
-                      label={({ name, percent }) =>
-                        `${name}: ${(percent * 100).toFixed(0)}%`
-                      }
-                      outerRadius={100}
-                      fill="#8884d8"
-                      dataKey="value"
-                    >
-                      {departmentData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Key Performance Indicators</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-medium">Patient Satisfaction</div>
-                      <div className="text-sm text-muted-foreground">
-                        Based on 2,847 surveys
-                      </div>
-                    </div>
-                    <div className="text-2xl font-bold text-primary">94.5%</div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-medium">Average Wait Time</div>
-                      <div className="text-sm text-muted-foreground">
-                        For appointments
-                      </div>
-                    </div>
-                    <div className="text-2xl font-bold">18 min</div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-medium">Bed Occupancy Rate</div>
-                      <div className="text-sm text-muted-foreground">
-                        Current utilization
-                      </div>
-                    </div>
-                    <div className="text-2xl font-bold">82%</div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-medium">Staff Efficiency</div>
-                      <div className="text-sm text-muted-foreground">
-                        Patients per staff
-                      </div>
-                    </div>
-                    <div className="text-2xl font-bold">8.4</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-      </Tabs>
     </div>
   );
-};
-
-export default Analytics;
+}

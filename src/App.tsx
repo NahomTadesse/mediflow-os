@@ -22,8 +22,8 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
+    <DarkMode />
     <TooltipProvider>
-      <DarkMode />
       <Toaster />
       <Sonner />
       <BrowserRouter>
@@ -62,6 +62,7 @@ const App = () => (
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <GlobalChat />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

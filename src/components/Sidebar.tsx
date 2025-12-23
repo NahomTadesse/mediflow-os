@@ -1,3 +1,4 @@
+// components/Sidebar.tsx
 import { NavLink } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -16,6 +17,7 @@ import {
   Bed,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useState, useEffect } from "react";
 
 const mainNavigation = [
   { name: "Dashboard", href: "/", icon: LayoutDashboard },
@@ -25,6 +27,7 @@ const mainNavigation = [
   { name: "Billing", href: "/billing", icon: Receipt },
   { name: "Inventory", href: "/inventory", icon: Package },
   { name: "Laboratory", href: "/laboratory", icon: FlaskConical },
+  { name: "Bed Management", href: "/bedmanagement", icon: Bed },
   { name: "Staff & HR", href: "/hr", icon: UserCircle },
   { name: "Finance", href: "/finance", icon: DollarSign },
   { name: "Analytics", href: "/analytics", icon: BarChart3 },
@@ -32,6 +35,23 @@ const mainNavigation = [
 ];
 
 export const Sidebar = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIfMobile = () => {
+      const mobile = window.innerWidth < 1024;
+      setIsMobile(mobile);
+      if (!mobile) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    checkIfMobile();
+    window.addEventListener("resize", checkIfMobile);
+    return () => window.removeEventListener("resize", checkIfMobile);
+  }, []);
+
   return (
     <>
       {/* Main Sidebar - Scrollable */}

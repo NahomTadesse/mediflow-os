@@ -1,78 +1,127 @@
-// pages/Billing.tsx
+// pages/HospitalBedManagement.tsx
 "use client";
 
 import { useState } from "react";
-import { Search, Plus, Download, Bell } from "lucide-react";
+import { Search, Plus, Bell, Bed, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
-const mockInvoices = [
+const mockBeds = [
   {
-    id: "INV-2025-001",
-    patientName: "John Doe",
-    patientId: "P-12345",
-    date: "2025-10-18",
-    amount: 850.0,
-    status: "Paid",
-    paymentMethod: "Insurance",
+    id: "ICU-01",
+    bedNumber: "ICU-01",
+    patientName: "Ahmed Kebede",
+    patientId: "P-1001",
+    ward: "ICU",
+    status: "occupied",
+    admissionDate: "2025-04-01",
   },
   {
-    id: "INV-2025-002",
-    patientName: "Jane Smith",
-    patientId: "P-12346",
-    date: "2025-10-17",
-    amount: 1250.0,
-    status: "Pending",
-    paymentMethod: "Cash",
+    id: "ICU-02",
+    bedNumber: "ICU-02",
+    patientName: "",
+    patientId: "",
+    ward: "ICU",
+    status: "available",
+    admissionDate: "",
   },
   {
-    id: "INV-2025-003",
-    patientName: "Robert Johnson",
-    patientId: "P-12347",
-    date: "2025-10-16",
-    amount: 450.0,
-    status: "Overdue",
-    paymentMethod: "Card",
+    id: "GW-101",
+    bedNumber: "GW-101",
+    patientName: "Fatima Mohammed",
+    patientId: "P-1002",
+    ward: "General",
+    status: "occupied",
+    admissionDate: "2025-04-03",
   },
   {
-    id: "INV-2025-004",
-    patientName: "Mary Davis",
-    patientId: "P-12348",
-    date: "2025-10-15",
-    amount: 2100.0,
-    status: "Paid",
-    paymentMethod: "Insurance",
+    id: "GW-102",
+    bedNumber: "GW-102",
+    patientName: "",
+    patientId: "",
+    ward: "General",
+    status: "available",
+    admissionDate: "",
+  },
+  {
+    id: "PED-01",
+    bedNumber: "PED-01",
+    patientName: "Eden Tesfaye",
+    patientId: "P-1003",
+    ward: "Pediatric",
+    status: "occupied",
+    admissionDate: "2025-10-20",
+  },
+  {
+    id: "PED-02",
+    bedNumber: "PED-02",
+    patientName: "",
+    patientId: "",
+    ward: "Pediatric",
+    status: "cleaning",
+    admissionDate: "",
+  },
+  {
+    id: "MAT-01",
+    bedNumber: "MAT-01",
+    patientName: "",
+    patientId: "",
+    ward: "Maternity",
+    status: "available",
+    admissionDate: "",
+  },
+  {
+    id: "EMR-01",
+    bedNumber: "EMR-01",
+    patientName: "John Smith",
+    patientId: "P-1004",
+    ward: "Emergency",
+    status: "occupied",
+    admissionDate: "2025-10-19",
   },
 ];
 
 const stats = [
-  {
-    title: "Total Revenue",
-    value: "$428,650",
-    change: "+12.5% from last month",
-  },
-  { title: "Outstanding", value: "$52,340", change: "28 invoices" },
-  { title: "Collected Today", value: "$8,450", change: "15 payments" },
-  { title: "Overdue", value: "$12,890", change: "9 invoices" },
+  { title: "Total Beds", value: "156", change: "12 beds added" },
+  { title: "Occupied", value: "124", change: "79% occupancy" },
+  { title: "Available", value: "24", change: "8 cleaned today" },
+  { title: "Cleaning", value: "8", change: "Will be ready soon" },
 ];
 
 const recentAlerts = [
-  { title: "Payment Received", time: "5 min ago", type: "success" },
-  { title: "Invoice Overdue", time: "30 min ago", type: "warning" },
-  { title: "New Invoice Created", time: "1 hour ago", type: "info" },
+  { title: "New Patient Admitted", time: "5 min ago", type: "info" },
+  { title: "Bed Needs Cleaning", time: "30 min ago", type: "warning" },
+  { title: "Patient Discharged", time: "1 hour ago", type: "success" },
+  { title: "Bed Reserved", time: "2 hours ago", type: "info" },
 ];
 
-export default function Billing() {
+export default function HospitalBedManagement() {
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredInvoices = mockInvoices.filter(
-    (invoice) =>
-      invoice.patientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      invoice.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      invoice.patientId.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredBeds = mockBeds.filter(
+    (bed) =>
+      bed.patientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      bed.bedNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      bed.patientId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      bed.ward.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "occupied":
+        return "bg-red-100 text-red-800";
+      case "available":
+        return "bg-green-100 text-green-800";
+      case "cleaning":
+        return "bg-yellow-100 text-yellow-800";
+      case "reserved":
+        return "bg-blue-100 text-blue-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -83,10 +132,10 @@ export default function Billing() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">
-                  Billing & Invoicing
+                  Hospital Bed Management
                 </h1>
                 <p className="text-sm sm:text-base text-gray-600 mt-1">
-                  Manage invoices, payments, and insurance claims
+                  Real-time ward occupancy & patient allocation
                 </p>
               </div>
             </div>
@@ -97,10 +146,10 @@ export default function Billing() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="pl-12 -mt-12">
                 <h1 className="text-2xl sm:text-2xl font-bold text-gray-900">
-                  Billing
+                  Bed Management
                 </h1>
                 <p className="text-sm text-gray-600 mt-1">
-                  Manage invoices & payments
+                  Ward occupancy tracking
                 </p>
               </div>
             </div>
@@ -129,67 +178,80 @@ export default function Billing() {
                 ))}
               </div>
 
-              {/* Search & Invoices */}
+              {/* Search & Bed Cards */}
               <Card>
                 <CardHeader className="pb-4">
                   <div className="flex flex-col sm:flex-row gap-4">
                     <div className="relative flex-1">
                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                       <Input
-                        placeholder="Search by patient, invoice ID, or patient ID..."
+                        placeholder="Search beds by patient, bed number, or ward..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="pl-10"
                       />
                     </div>
-                    <div className="flex gap-2">
-                      <Button variant="outline">
-                        <Download className="h-4 w-4 mr-2" />
-                        Export
-                      </Button>
-                      <Button>
-                        <Plus className="h-4 w-4 mr-2" />
-                        New Invoice
-                      </Button>
-                    </div>
+                    <Button>
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add Bed
+                    </Button>
                   </div>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {filteredInvoices.map((invoice) => (
+                    {filteredBeds.map((bed) => (
                       <Card
-                        key={invoice.id}
+                        key={bed.id}
                         className="hover:shadow-md transition-shadow"
                       >
                         <CardContent className="p-4 sm:p-6">
                           <div className="flex items-start justify-between mb-4">
                             <div>
                               <h3 className="font-semibold text-base sm:text-lg">
-                                {invoice.patientName}
+                                {bed.bedNumber}
                               </h3>
                               <p className="text-sm text-gray-600">
-                                {invoice.id}
+                                {bed.ward} Ward
                               </p>
                             </div>
-                            <Badge
-                              className={`${
-                                invoice.status === "Overdue"
-                                  ? "bg-red-100 text-red-800"
-                                  : invoice.status === "Pending"
-                                  ? "bg-yellow-100 text-yellow-800"
-                                  : "bg-green-100 text-green-800"
-                              }`}
-                            >
-                              {invoice.status}
+                            <Badge className={getStatusColor(bed.status)}>
+                              {bed.status.charAt(0).toUpperCase() +
+                                bed.status.slice(1)}
                             </Badge>
                           </div>
 
-                          <div className="grid grid-cols-2 gap-3 text-sm text-gray-600">
-                            <div>Patient ID: {invoice.patientId}</div>
-                            <div>Date: {invoice.date}</div>
-                            <div>Amount: ${invoice.amount.toFixed(2)}</div>
-                            <div>Method: {invoice.paymentMethod}</div>
-                          </div>
+                          {bed.patientName ? (
+                            <>
+                              <div className="flex items-center gap-2 mb-3 p-2 bg-gray-50 rounded-lg">
+                                <User className="h-4 w-4 text-gray-500" />
+                                <div>
+                                  <p className="font-medium text-sm sm:text-base">
+                                    {bed.patientName}
+                                  </p>
+                                  <p className="text-xs text-gray-600">
+                                    ID: {bed.patientId}
+                                  </p>
+                                </div>
+                              </div>
+
+                              <div className="grid grid-cols-2 gap-3 text-sm text-gray-600">
+                                <div>Admission Date</div>
+                                <div>{bed.admissionDate}</div>
+                              </div>
+                            </>
+                          ) : (
+                            <div className="flex items-center gap-2 mb-3 p-2 bg-gray-50 rounded-lg">
+                              <Bed className="h-4 w-4 text-gray-500" />
+                              <div>
+                                <p className="font-medium text-sm sm:text-base">
+                                  Bed Available
+                                </p>
+                                <p className="text-xs text-gray-600">
+                                  Ready for patient assignment
+                                </p>
+                              </div>
+                            </div>
+                          )}
 
                           <div className="flex gap-2 mt-4">
                             <Button
@@ -200,7 +262,7 @@ export default function Billing() {
                               View Details
                             </Button>
                             <Button size="sm" className="flex-1">
-                              Process Payment
+                              {bed.patientName ? "Transfer" : "Assign"}
                             </Button>
                           </div>
                         </CardContent>
