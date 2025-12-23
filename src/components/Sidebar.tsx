@@ -14,14 +14,12 @@ import {
   Bell,
   Settings,
   Activity,
-  Menu,
-  X,
   Bed,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 
-const navigation = [
+const mainNavigation = [
   { name: "Dashboard", href: "/", icon: LayoutDashboard },
   { name: "Patients", href: "/patients", icon: Users },
   { name: "Appointments", href: "/appointments", icon: Calendar },
@@ -33,11 +31,7 @@ const navigation = [
   { name: "Staff & HR", href: "/hr", icon: UserCircle },
   { name: "Finance", href: "/finance", icon: DollarSign },
   { name: "Analytics", href: "/analytics", icon: BarChart3 },
-];
-
-const bottomNavigation = [
-  { name: "Notifications", href: "/notifications", icon: Bell },
-  { name: "Settings", href: "/settings", icon: Settings },
+  { name: "Bed Management", href: "/bed-management", icon: Bed },
 ];
 
 export const Sidebar = () => {
@@ -60,92 +54,78 @@ export const Sidebar = () => {
 
   return (
     <>
-      {/* Mobile Menu Toggle */}
-      {isMobile && (
-        <button
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="fixed top-4 left-4 z-50 p-3 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
-          aria-label="Toggle menu"
-        >
-          {isMobileMenuOpen ? (
-            <X className="w-6 h-6" />
-          ) : (
-            <Menu className="w-6 h-6" />
-          )}
-        </button>
-      )}
-
-      {/* Sidebar */}
-      <aside
-        className={cn(
-          "fixed inset-y-0 left-0 z-40 w-64 bg-card border-r border-border flex flex-col transition-transform duration-300 ease-in-out",
-          "lg:relative lg:translate-x-0 lg:z-auto",
-          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-        )}
-      >
-        {/* Logo Header */}
-        <div className="h-16 flex items-center justify-center px-6 border-b border-border shrink-0">
-          <div className="flex items-center gap-3">
+      {/* Main Sidebar - Scrollable */}
+      <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r border-border bg-card">
+        <div className="flex h-full flex-col">
+          {/* Logo */}
+          <div className="flex h-16 items-center border-b border-border px-6">
             <Activity className="h-8 w-8 text-primary" />
-            <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            <span className="ml-3 text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               MedCare ERP
             </span>
           </div>
-        </div>
 
-        {/* Scrollable Main Navigation */}
-        <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
-          {navigation.map((item) => (
-            <NavLink
-              key={item.name}
-              to={item.href}
-              end={item.href === "/"}
-              onClick={() => isMobile && setIsMobileMenuOpen(false)}
-              className={({ isActive }) =>
-                cn(
-                  "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all",
-                  isActive
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                )
-              }
-            >
-              <item.icon className="h-5 w-5 flex-shrink-0" />
-              <span>{item.name}</span>
-            </NavLink>
-          ))}
-        </nav>
-
-        {/* Bottom Navigation - Sticky at bottom of viewport on desktop */}
-        <div className="sticky bottom-0 left-0 right-0 border-t border-border bg-card px-3 py-4 space-y-1 shadow-lg">
-          {bottomNavigation.map((item) => (
-            <NavLink
-              key={item.name}
-              to={item.href}
-              onClick={() => isMobile && setIsMobileMenuOpen(false)}
-              className={({ isActive }) =>
-                cn(
-                  "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all",
-                  isActive
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                )
-              }
-            >
-              <item.icon className="h-5 w-5 flex-shrink-0" />
-              <span>{item.name}</span>
-            </NavLink>
-          ))}
+          {/* Scrollable Menu */}
+          <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
+            {mainNavigation.map((item) => (
+              <NavLink
+                key={item.name}
+                to={item.href}
+                end={item.href === "/"}
+                className={({ isActive }) =>
+                  cn(
+                    "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
+                    isActive
+                      ? "bg-primary text-primary-foreground shadow-sm"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  )
+                }
+              >
+                <item.icon className="h-5 w-5 flex-shrink-0" />
+                <span>{item.name}</span>
+              </NavLink>
+            ))}
+          </nav>
         </div>
       </aside>
 
-      {/* Mobile Overlay */}
-      {isMobileMenuOpen && isMobile && (
-        <div
-          className="fixed inset-0 bg-black/50 z-30 lg:hidden"
-          onClick={() => setIsMobileMenuOpen(false)}
-        />
-      )}
+      {/* FIXED BOTTOM BAR - Always visible on screen */}
+      <div className="fixed bottom-0 left-0 z-50 w-64 border-r border-t border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80">
+        <div className="space-y-1 px-3 py-4">
+          <NavLink
+            to="/notifications"
+            className={({ isActive }) =>
+              cn(
+                "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
+                isActive
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+              )
+            }
+          >
+            <Bell className="h-5 w-5 flex-shrink-0" />
+            <span>Notifications</span>
+          </NavLink>
+
+          <NavLink
+            to="/settings"
+            className={({ isActive }) =>
+              cn(
+                "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
+                isActive
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+              )
+            }
+          >
+            <Settings className="h-5 w-5 flex-shrink-0" />
+            <span>Settings</span>
+          </NavLink>
+        </div>
+      </div>
+
+      {/* Add left padding to main content so it doesn't hide under sidebar */}
+      <div className="w-64 flex-shrink-0" />
     </>
   );
 };
