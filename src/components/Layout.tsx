@@ -18,15 +18,15 @@ export const Layout = () => {
   }, []);
 
   return (
-    <div className="flex min-h-screen w-full bg-background">
-      {/* Sidebar - Fixed width */}
+    <div className="flex min-h-screen bg-background">
       <Sidebar />
-
-      {/* Main Content - Takes remaining space */}
-      <main className="flex-1 min-h-screen bg-background">
-        <div className="p-6 md:p-8 lg:p-10">
-          <Outlet />
-        </div>
+      <main
+        className={cn(
+          "flex-1 p-3 sm:p-4 md:p-6 transition-all duration-300",
+          isMobile ? "ml-0" : "-ml-24"
+        )}
+      >
+        <Outlet />
       </main>
     </div>
   );
