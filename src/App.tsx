@@ -19,6 +19,7 @@ import NotFound from "./pages/NotFound";
 import DarkMode from "./pages/Darkmode";
 import GlobalChat from "./pages/GlobalChat";
 import HospitalBedManagement from "./pages/HospitalBedManagement";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -40,7 +41,7 @@ const App = () => (
             <Route path="/hr" element={<HR />} />
             <Route path="/finance" element={<Finance />} />
             <Route path="/analytics" element={<Analytics />} />
-            <Route path="/bed-management" element={<HospitalBedManagement />} />
+            <Route path="/bedmanagement" element={<HospitalBedManagement />} />
 
             <Route
               path="/notifications"
