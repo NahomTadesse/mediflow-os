@@ -1,7 +1,7 @@
 // pages/Appointments.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react"; // Add useEffect
 import {
   Search,
   Plus,
@@ -102,6 +102,24 @@ const recentAlerts = [
 export default function Appointments() {
   const [searchQuery, setSearchQuery] = useState("");
 
+  // Add dark mode detection - NO BUTTON ADDED
+  useEffect(() => {
+    // Check if dark mode is stored in localStorage (from other components)
+    const savedTheme = localStorage.getItem("theme");
+
+    // Check system preference
+    const systemPrefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+
+    // Set initial theme automatically
+    if (savedTheme === "dark" || (!savedTheme && systemPrefersDark)) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, []);
+
   // Currently showing only today — you can add tabs later
   const currentAppointments = appointments.today;
 
@@ -112,17 +130,17 @@ export default function Appointments() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
       <div className="pt-16 lg:pt-0 p-3 sm:p-4 md:p-6">
         <div className="max-w-7xl mx-auto">
           {/* Desktop Header - No buttons */}
           <header className="hidden lg:block mb-4 sm:mb-6 md:mb-8">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
                   Appointments
                 </h1>
-                <p className="text-sm sm:text-base text-muted-foreground mt-1">
+                <p className="text-sm sm:text-base text-muted-foreground dark:text-gray-300 mt-1">
                   Manage and schedule patient appointments
                 </p>
               </div>
@@ -133,15 +151,19 @@ export default function Appointments() {
           <header className="lg:hidden mb-4 sm:mb-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="pl-12 -mt-12">
-                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
                   Appointments
                 </h1>
-                <p className="text-sm text-muted-foreground mt-1">
+                <p className="text-sm text-muted-foreground dark:text-gray-300 mt-1">
                   Manage patient appointments
                 </p>
               </div>
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" className="text-xs">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-xs dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+                >
                   <Bell className="w-3 h-3 mr-1" />
                   Alerts
                 </Button>
@@ -156,15 +178,18 @@ export default function Appointments() {
               {/* Stats Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 {stats.map((stat) => (
-                  <Card key={stat.title}>
+                  <Card
+                    key={stat.title}
+                    className="dark:bg-gray-900 dark:border-gray-800"
+                  >
                     <CardContent className="p-4 sm:p-6">
-                      <p className="text-xs sm:text-sm font-medium text-gray-600">
+                      <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300">
                         {stat.title}
                       </p>
-                      <p className="text-xl sm:text-2xl font-bold mt-1 sm:mt-2">
+                      <p className="text-xl sm:text-2xl font-bold mt-1 sm:mt-2 dark:text-white">
                         {stat.value}
                       </p>
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                         {stat.change}
                       </p>
                     </CardContent>
@@ -173,7 +198,7 @@ export default function Appointments() {
               </div>
 
               {/* Search & Appointments List */}
-              <Card>
+              <Card className="dark:bg-gray-900 dark:border-gray-800">
                 <CardHeader className="pb-4">
                   <div className="flex flex-col sm:flex-row gap-4">
                     <div className="relative flex-1">
@@ -182,10 +207,10 @@ export default function Appointments() {
                         placeholder="Search appointments by patient or doctor..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-10"
+                        className="pl-10 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                       />
                     </div>
-                    <Button>
+                    <Button className="dark:bg-blue-600 dark:hover:bg-blue-700">
                       <Plus className="h-4 w-4 mr-2" />
                       New Appointment
                     </Button>
@@ -196,7 +221,7 @@ export default function Appointments() {
                     {filteredAppointments.map((appt) => (
                       <Card
                         key={appt.id}
-                        className="hover:shadow-md transition-shadow"
+                        className="hover:shadow-md transition-shadow dark:bg-gray-900 dark:border-gray-800"
                       >
                         <CardContent className="p-4 sm:p-6">
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -206,16 +231,21 @@ export default function Appointments() {
                               </div>
                               <div>
                                 <div className="flex flex-wrap items-center gap-2 mb-2">
-                                  <h3 className="font-semibold text-base sm:text-lg">
+                                  <h3 className="font-semibold text-base sm:text-lg dark:text-white">
                                     {appt.patient}
                                   </h3>
-                                  <Badge variant="outline">{appt.type}</Badge>
+                                  <Badge
+                                    variant="outline"
+                                    className="dark:border-gray-700 dark:text-gray-300"
+                                  >
+                                    {appt.type}
+                                  </Badge>
                                   {appt.status && (
                                     <Badge
                                       className={`${
                                         appt.status === "confirmed"
-                                          ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
-                                          : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300"
+                                          ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                                          : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
                                       }`}
                                     >
                                       {appt.status}
@@ -241,15 +271,27 @@ export default function Appointments() {
                             </div>
 
                             <div className="flex items-center gap-2 self-start sm:self-center">
-                              <Button size="sm" variant="outline">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+                              >
                                 <Video className="w-4 h-4 mr-1" />
                                 <span className="hidden sm:inline">Video</span>
                               </Button>
-                              <Button size="sm" variant="outline">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+                              >
                                 <Phone className="w-4 h-4 mr-1" />
                                 <span className="hidden sm:inline">Call</span>
                               </Button>
-                              <Button size="sm" variant="ghost">
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                className="dark:text-gray-400 dark:hover:bg-gray-800"
+                              >
                                 <MoreVertical className="w-4 h-4" />
                               </Button>
                             </div>
@@ -264,9 +306,9 @@ export default function Appointments() {
 
             {/* Right Column - Recent Alerts Only */}
             <div className="space-y-4 sm:space-y-6">
-              <Card>
+              <Card className="dark:bg-gray-900 dark:border-gray-800">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+                  <CardTitle className="text-base sm:text-lg flex items-center gap-2 dark:text-white">
                     <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5" />
                     Recent Alerts
                   </CardTitle>
@@ -276,13 +318,15 @@ export default function Appointments() {
                     {recentAlerts.map((alert, index) => (
                       <div
                         key={index}
-                        className="flex items-center justify-between p-2 hover:bg-gray-50 rounded-lg"
+                        className="flex items-center justify-between p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
                       >
                         <div>
-                          <p className="text-xs sm:text-sm font-medium">
+                          <p className="text-xs sm:text-sm font-medium dark:text-white">
                             {alert.title}
                           </p>
-                          <p className="text-xs text-gray-500">{alert.time}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            {alert.time}
+                          </p>
                         </div>
                         <Badge
                           variant={
@@ -292,7 +336,7 @@ export default function Appointments() {
                               ? "destructive"
                               : "secondary"
                           }
-                          className="text-xs"
+                          className="text-xs dark:bg-opacity-30"
                         >
                           {alert.type}
                         </Badge>

@@ -1,14 +1,15 @@
+// pages/Finance.tsx
 "use client";
 
 import { useState } from "react";
 import {
   Search,
   Plus,
-  Bell,
   Download,
   DollarSign,
   TrendingUp,
   TrendingDown,
+  AlertCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -122,17 +123,17 @@ export default function Finance() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
       <div className="pt-16 lg:pt-0 p-3 sm:p-4 md:p-6">
         <div className="max-w-7xl mx-auto">
-          {/* Header */}
+          {/* Desktop Header */}
           <header className="hidden lg:block mb-4 sm:mb-6 md:mb-8">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
                   Finance & Accounting
                 </h1>
-                <p className="text-sm sm:text-base text-gray-600 mt-1">
+                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 mt-1">
                   Track revenue, expenses, and financial health
                 </p>
               </div>
@@ -143,10 +144,10 @@ export default function Finance() {
           <header className="lg:hidden mb-4 sm:mb-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="pl-12 -mt-12">
-                <h1 className="text-2xl sm:text-2xl font-bold text-gray-900">
+                <h1 className="text-2xl sm:text-2xl font-bold text-gray-900 dark:text-white">
                   Finance
                 </h1>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
                   Track revenue & expenses
                 </p>
               </div>
@@ -160,30 +161,33 @@ export default function Finance() {
               {/* Stats Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 {stats.map((stat) => (
-                  <Card key={stat.title}>
+                  <Card
+                    key={stat.title}
+                    className="dark:bg-gray-900 dark:border-gray-800"
+                  >
                     <CardContent className="p-4 sm:p-6">
                       <div className="flex items-start justify-between mb-2">
-                        <p className="text-xs sm:text-sm font-medium text-gray-600">
+                        <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300">
                           {stat.title}
                         </p>
-                        <div className="p-1.5 bg-primary/10 rounded-md">
+                        <div className="p-1.5 bg-primary/10 dark:bg-primary/20 rounded-md">
                           <DollarSign className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
                         </div>
                       </div>
-                      <p className="text-xl sm:text-2xl font-bold mt-1 sm:mt-2">
+                      <p className="text-xl sm:text-2xl font-bold mt-1 sm:mt-2 dark:text-white">
                         {stat.value}
                       </p>
                       <div className="flex items-center gap-1 mt-1">
                         {stat.change.includes("+") ? (
-                          <TrendingUp className="h-3 w-3 text-green-600" />
+                          <TrendingUp className="h-3 w-3 text-green-600 dark:text-green-400" />
                         ) : (
-                          <TrendingDown className="h-3 w-3 text-red-600" />
+                          <TrendingDown className="h-3 w-3 text-red-600 dark:text-red-400" />
                         )}
                         <p
                           className={`text-xs ${
                             stat.change.includes("+")
-                              ? "text-green-600"
-                              : "text-red-600"
+                              ? "text-green-600 dark:text-green-400"
+                              : "text-red-600 dark:text-red-400"
                           }`}
                         >
                           {stat.change}
@@ -194,28 +198,33 @@ export default function Finance() {
                 ))}
               </div>
 
-              {/* Search & Transaction Cards */}
-              <Card>
+              {/* Search & Transactions */}
+              <Card className="dark:bg-gray-900 dark:border-gray-800">
                 <CardHeader className="pb-4">
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <div className="relative flex-1">
-                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                      <Input
-                        placeholder="Search transactions by description or ID..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-10"
-                      />
-                    </div>
-                    <div className="flex gap-2">
-                      <Button variant="outline">
-                        <Download className="h-4 w-4 mr-2" />
-                        Export
-                      </Button>
-                      <Button>
-                        <Plus className="h-4 w-4 mr-2" />
-                        New Entry
-                      </Button>
+                  <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+                    <CardTitle className="text-base sm:text-lg dark:text-white">
+                      Recent Transactions
+                    </CardTitle>
+                    <div className="flex w-full sm:w-auto gap-3">
+                      <div className="relative flex-1 sm:flex-initial">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                        <Input
+                          placeholder="Search by description or ID..."
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          className="pl-10 w-full sm:w-64 dark:bg-gray-800 dark:border-gray-700"
+                        />
+                      </div>
+                      <div className="flex gap-2">
+                        <Button variant="outline">
+                          <Download className="h-4 w-4 mr-2" />
+                          Export
+                        </Button>
+                        <Button>
+                          <Plus className="h-4 w-4 mr-2" />
+                          New Entry
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </CardHeader>
@@ -224,30 +233,30 @@ export default function Finance() {
                     {filteredTransactions.map((transaction) => (
                       <Card
                         key={transaction.id}
-                        className="hover:shadow-md transition-shadow"
+                        className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                       >
                         <CardContent className="p-4 sm:p-6">
                           <div className="flex items-start justify-between mb-4">
                             <div>
-                              <h3 className="font-semibold text-base sm:text-lg">
+                              <h3 className="font-semibold text-base sm:text-lg dark:text-white">
                                 {transaction.description}
                               </h3>
-                              <p className="text-sm text-gray-600">
+                              <p className="text-sm text-gray-600 dark:text-gray-400">
                                 ID: {transaction.id}
                               </p>
                             </div>
                             <Badge
-                              className={`${
+                              className={`text-xs ${
                                 transaction.type === "Income"
-                                  ? "bg-green-100 text-green-800"
-                                  : "bg-red-100 text-red-800"
+                                  ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                                  : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
                               }`}
                             >
                               {transaction.type}
                             </Badge>
                           </div>
 
-                          <div className="grid grid-cols-2 gap-3 text-sm text-gray-600">
+                          <div className="grid grid-cols-2 gap-3 text-sm text-gray-600 dark:text-gray-400">
                             <div>Date: {transaction.date}</div>
                             <div>Category: {transaction.category}</div>
                             <div className="col-span-2">
@@ -255,8 +264,8 @@ export default function Finance() {
                               <span
                                 className={`ml-2 font-semibold ${
                                   transaction.amount > 0
-                                    ? "text-green-600"
-                                    : "text-red-600"
+                                    ? "text-green-600 dark:text-green-400"
+                                    : "text-red-600 dark:text-red-400"
                                 }`}
                               >
                                 ${Math.abs(transaction.amount).toLocaleString()}
@@ -268,7 +277,7 @@ export default function Finance() {
                             <Button
                               size="sm"
                               variant="outline"
-                              className="flex-1"
+                              className="flex-1 dark:border-gray-700"
                             >
                               View Details
                             </Button>
@@ -285,32 +294,32 @@ export default function Finance() {
 
               {/* Revenue & Expense Breakdown */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-                <Card>
+                <Card className="dark:bg-gray-900 dark:border-gray-800">
                   <CardHeader className="pb-4">
-                    <CardTitle className="text-base sm:text-lg">
+                    <CardTitle className="text-base sm:text-lg dark:text-white">
                       Revenue Breakdown
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
-                      {revenueBreakdown.map((item, index) => (
+                      {revenueBreakdown.map((item) => (
                         <div
-                          key={index}
-                          className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg"
+                          key={item.name}
+                          className="flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
                         >
                           <div>
-                            <h3 className="font-semibold text-sm sm:text-base">
+                            <h3 className="font-semibold text-sm sm:text-base dark:text-white">
                               {item.name}
                             </h3>
-                            <p className="text-xs text-gray-600">
+                            <p className="text-xs text-gray-600 dark:text-gray-400">
                               {item.description}
                             </p>
                           </div>
                           <div className="text-right">
-                            <p className="font-bold text-sm sm:text-base">
+                            <p className="font-bold text-sm sm:text-base dark:text-white">
                               {item.amount}
                             </p>
-                            <p className="text-xs text-primary">
+                            <p className="text-xs text-primary dark:text-primary-400">
                               {item.percentage}
                             </p>
                           </div>
@@ -320,32 +329,32 @@ export default function Finance() {
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="dark:bg-gray-900 dark:border-gray-800">
                   <CardHeader className="pb-4">
-                    <CardTitle className="text-base sm:text-lg">
+                    <CardTitle className="text-base sm:text-lg dark:text-white">
                       Expense Breakdown
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
-                      {expenseBreakdown.map((item, index) => (
+                      {expenseBreakdown.map((item) => (
                         <div
-                          key={index}
-                          className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg"
+                          key={item.name}
+                          className="flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
                         >
                           <div>
-                            <h3 className="font-semibold text-sm sm:text-base">
+                            <h3 className="font-semibold text-sm sm:text-base dark:text-white">
                               {item.name}
                             </h3>
-                            <p className="text-xs text-gray-600">
+                            <p className="text-xs text-gray-600 dark:text-gray-400">
                               {item.description}
                             </p>
                           </div>
                           <div className="text-right">
-                            <p className="font-bold text-sm sm:text-base">
+                            <p className="font-bold text-sm sm:text-base dark:text-white">
                               {item.amount}
                             </p>
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
                               {item.percentage}
                             </p>
                           </div>
@@ -357,12 +366,12 @@ export default function Finance() {
               </div>
             </div>
 
-            {/* Right Column - Only Recent Alerts */}
+            {/* Right Column - Recent Alerts */}
             <div className="space-y-4 sm:space-y-6">
-              <Card>
+              <Card className="dark:bg-gray-900 dark:border-gray-800">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-base sm:text-lg flex items-center gap-2">
-                    <Bell className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <CardTitle className="text-base sm:text-lg flex items-center gap-2 dark:text-white">
+                    <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5" />
                     Recent Alerts
                   </CardTitle>
                 </CardHeader>
@@ -371,15 +380,25 @@ export default function Finance() {
                     {recentAlerts.map((alert, index) => (
                       <div
                         key={index}
-                        className="flex items-center justify-between p-2 hover:bg-gray-50 rounded-lg"
+                        className="flex items-center justify-between p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
                       >
                         <div>
-                          <p className="text-xs sm:text-sm font-medium">
+                          <p className="text-xs sm:text-sm font-medium dark:text-white">
                             {alert.title}
                           </p>
-                          <p className="text-xs text-gray-500">{alert.time}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            {alert.time}
+                          </p>
                         </div>
-                        <Badge variant={alert.type as any} className="text-xs">
+                        <Badge
+                          className={`text-xs ${
+                            alert.type === "success"
+                              ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                              : alert.type === "warning"
+                              ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
+                              : "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                          }`}
+                        >
                           {alert.type}
                         </Badge>
                       </div>

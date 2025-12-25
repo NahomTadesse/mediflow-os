@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Search,
   Download,
@@ -10,6 +10,8 @@ import {
   Calendar,
   DollarSign,
   Activity,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -97,23 +99,56 @@ const revenueTrends = [
 export default function Analytics() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("overview");
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // Detect system dark mode preference
+  useEffect(() => {
+    // Check if dark mode is stored in localStorage
+    const savedTheme = localStorage.getItem("theme");
+
+    // Check system preference
+    const systemPrefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+
+    // Set initial theme
+    if (savedTheme === "dark" || (!savedTheme && systemPrefersDark)) {
+      setIsDarkMode(true);
+      document.documentElement.classList.add("dark");
+    } else {
+      setIsDarkMode(false);
+      document.documentElement.classList.remove("dark");
+    }
+  }, []);
+
+  // Toggle dark mode function
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+    if (!isDarkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  };
 
   const filteredDepartments = departmentPerformance.filter((dept) =>
     dept.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
       <div className="pt-16 lg:pt-0 p-3 sm:p-4 md:p-6">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <header className="hidden lg:block mb-4 sm:mb-6 md:mb-8">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
                   Analytics & Reports
                 </h1>
-                <p className="text-sm sm:text-base text-gray-600 mt-1">
+                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 mt-1">
                   Data insights and performance metrics
                 </p>
               </div>
@@ -124,10 +159,10 @@ export default function Analytics() {
           <header className="lg:hidden mb-4 sm:mb-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="pl-12 -mt-12">
-                <h1 className="text-2xl sm:text-2xl font-bold text-gray-900">
+                <h1 className="text-2xl sm:text-2xl font-bold text-gray-900 dark:text-white">
                   Analytics
                 </h1>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
                   Data insights & metrics
                 </p>
               </div>
@@ -141,22 +176,27 @@ export default function Analytics() {
               {/* Stats Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 {stats.map((stat) => (
-                  <Card key={stat.title}>
+                  <Card
+                    key={stat.title}
+                    className="dark:bg-gray-900 dark:border-gray-800"
+                  >
                     <CardContent className="p-4 sm:p-6">
                       <div className="flex items-start justify-between mb-2">
-                        <p className="text-xs sm:text-sm font-medium text-gray-600">
+                        <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300">
                           {stat.title}
                         </p>
-                        <div className="p-1.5 bg-primary/10 rounded-md">
-                          <stat.icon className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
+                        <div className="p-1.5 bg-primary/10 dark:bg-primary/20 rounded-md">
+                          <stat.icon className="h-3 w-3 sm:h-4 sm:w-4 text-primary dark:text-primary-400" />
                         </div>
                       </div>
-                      <p className="text-xl sm:text-2xl font-bold mt-1 sm:mt-2">
+                      <p className="text-xl sm:text-2xl font-bold mt-1 sm:mt-2 dark:text-white">
                         {stat.value}
                       </p>
                       <div className="flex items-center gap-1 mt-1">
-                        <TrendingUp className="h-3 w-3 text-green-600" />
-                        <p className="text-xs text-green-600">{stat.change}</p>
+                        <TrendingUp className="h-3 w-3 text-green-600 dark:text-green-400" />
+                        <p className="text-xs text-green-600 dark:text-green-400">
+                          {stat.change}
+                        </p>
                       </div>
                     </CardContent>
                   </Card>
@@ -164,7 +204,7 @@ export default function Analytics() {
               </div>
 
               {/* Search & Analytics Tabs */}
-              <Card>
+              <Card className="dark:bg-gray-900 dark:border-gray-800">
                 <CardHeader className="pb-4">
                   <div className="flex flex-col sm:flex-row gap-4">
                     <div className="relative flex-1">
@@ -173,10 +213,13 @@ export default function Analytics() {
                         placeholder="Search departments or metrics..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-10"
+                        className="pl-10 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                       />
                     </div>
-                    <Button variant="outline">
+                    <Button
+                      variant="outline"
+                      className="dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+                    >
                       <Download className="h-4 w-4 mr-2" />
                       Export Report
                     </Button>
@@ -184,41 +227,64 @@ export default function Analytics() {
                 </CardHeader>
                 <CardContent>
                   <Tabs defaultValue="overview" className="space-y-4">
-                    <TabsList className="grid grid-cols-2 sm:grid-cols-4">
-                      <TabsTrigger value="overview">Overview</TabsTrigger>
-                      <TabsTrigger value="departments">Departments</TabsTrigger>
-                      <TabsTrigger value="financial">Financial</TabsTrigger>
-                      <TabsTrigger value="performance">Performance</TabsTrigger>
+                    <TabsList className="grid grid-cols-2 sm:grid-cols-4 dark:bg-gray-800">
+                      <TabsTrigger
+                        value="overview"
+                        className="dark:data-[state=active]:bg-gray-700"
+                      >
+                        Overview
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="departments"
+                        className="dark:data-[state=active]:bg-gray-700"
+                      >
+                        Departments
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="financial"
+                        className="dark:data-[state=active]:bg-gray-700"
+                      >
+                        Financial
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="performance"
+                        className="dark:data-[state=active]:bg-gray-700"
+                      >
+                        Performance
+                      </TabsTrigger>
                     </TabsList>
 
                     <TabsContent value="overview" className="space-y-4">
                       {/* KPI Metrics */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {kpiMetrics.map((kpi) => (
-                          <Card key={kpi.name}>
+                          <Card
+                            key={kpi.name}
+                            className="dark:bg-gray-900 dark:border-gray-800"
+                          >
                             <CardContent className="p-4 sm:p-6">
                               <div className="flex items-start justify-between mb-2">
                                 <div>
-                                  <h3 className="font-semibold text-sm sm:text-base">
+                                  <h3 className="font-semibold text-sm sm:text-base dark:text-white">
                                     {kpi.name}
                                   </h3>
-                                  <p className="text-xs text-gray-600">
+                                  <p className="text-xs text-gray-600 dark:text-gray-300">
                                     {kpi.description}
                                   </p>
                                 </div>
                                 <Badge
                                   className={
                                     kpi.trend === "up"
-                                      ? "bg-green-100 text-green-800"
+                                      ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
                                       : kpi.trend === "down"
-                                      ? "bg-red-100 text-red-800"
-                                      : "bg-yellow-100 text-yellow-800"
+                                      ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+                                      : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
                                   }
                                 >
                                   {kpi.trend}
                                 </Badge>
                               </div>
-                              <p className="text-xl sm:text-2xl font-bold mt-2">
+                              <p className="text-xl sm:text-2xl font-bold mt-2 dark:text-white">
                                 {kpi.value}
                               </p>
                             </CardContent>
@@ -227,9 +293,9 @@ export default function Analytics() {
                       </div>
 
                       {/* Revenue Trends */}
-                      <Card>
+                      <Card className="dark:bg-gray-900 dark:border-gray-800">
                         <CardHeader>
-                          <CardTitle className="text-base sm:text-lg">
+                          <CardTitle className="text-base sm:text-lg dark:text-white">
                             Revenue Trends (Last 6 Months)
                           </CardTitle>
                         </CardHeader>
@@ -238,21 +304,21 @@ export default function Analytics() {
                             {revenueTrends.map((month, index) => (
                               <div
                                 key={index}
-                                className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg"
+                                className="flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
                               >
                                 <div>
-                                  <h3 className="font-semibold text-sm sm:text-base">
+                                  <h3 className="font-semibold text-sm sm:text-base dark:text-white">
                                     {month.month}
                                   </h3>
-                                  <p className="text-xs text-gray-600">
+                                  <p className="text-xs text-gray-600 dark:text-gray-300">
                                     {month.patients} patients
                                   </p>
                                 </div>
                                 <div className="text-right">
-                                  <p className="font-bold text-sm sm:text-base">
+                                  <p className="font-bold text-sm sm:text-base dark:text-white">
                                     ${(month.revenue / 1000).toFixed(0)}K
                                   </p>
-                                  <p className="text-xs text-primary">
+                                  <p className="text-xs text-primary dark:text-primary-300">
                                     Revenue
                                   </p>
                                 </div>
@@ -266,29 +332,32 @@ export default function Analytics() {
                     <TabsContent value="departments" className="space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {filteredDepartments.map((dept) => (
-                          <Card key={dept.name}>
+                          <Card
+                            key={dept.name}
+                            className="dark:bg-gray-900 dark:border-gray-800"
+                          >
                             <CardContent className="p-4 sm:p-6">
                               <div className="flex items-start justify-between mb-4">
                                 <div>
-                                  <h3 className="font-semibold text-base sm:text-lg">
+                                  <h3 className="font-semibold text-base sm:text-lg dark:text-white">
                                     {dept.name}
                                   </h3>
-                                  <p className="text-sm text-gray-600">
+                                  <p className="text-sm text-gray-600 dark:text-gray-300">
                                     Department Performance
                                   </p>
                                 </div>
-                                <Badge className="bg-blue-100 text-blue-800">
+                                <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
                                   {dept.growth}
                                 </Badge>
                               </div>
 
-                              <div className="grid grid-cols-2 gap-3 text-sm text-gray-600">
+                              <div className="grid grid-cols-2 gap-3 text-sm text-gray-600 dark:text-gray-300">
                                 <div>Total Patients</div>
-                                <div className="text-right">
+                                <div className="text-right dark:text-white">
                                   {dept.patients}
                                 </div>
                                 <div>Efficiency</div>
-                                <div className="text-right">
+                                <div className="text-right dark:text-white">
                                   {dept.efficiency}
                                 </div>
                               </div>
@@ -297,7 +366,7 @@ export default function Analytics() {
                                 <Button
                                   size="sm"
                                   variant="outline"
-                                  className="flex-1"
+                                  className="flex-1 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
                                 >
                                   View Details
                                 </Button>
@@ -317,9 +386,9 @@ export default function Analytics() {
 
             {/* Right Column - Only Recent Alerts */}
             <div className="space-y-4 sm:space-y-6">
-              <Card>
+              <Card className="dark:bg-gray-900 dark:border-gray-800">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+                  <CardTitle className="text-base sm:text-lg flex items-center gap-2 dark:text-white">
                     <Bell className="w-4 h-4 sm:w-5 sm:h-5" />
                     Recent Alerts
                   </CardTitle>
@@ -329,15 +398,20 @@ export default function Analytics() {
                     {recentAlerts.map((alert, index) => (
                       <div
                         key={index}
-                        className="flex items-center justify-between p-2 hover:bg-gray-50 rounded-lg"
+                        className="flex items-center justify-between p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
                       >
                         <div>
-                          <p className="text-xs sm:text-sm font-medium">
+                          <p className="text-xs sm:text-sm font-medium dark:text-white">
                             {alert.title}
                           </p>
-                          <p className="text-xs text-gray-500">{alert.time}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            {alert.time}
+                          </p>
                         </div>
-                        <Badge variant={alert.type as any} className="text-xs">
+                        <Badge
+                          variant={alert.type as any}
+                          className="text-xs dark:bg-opacity-30"
+                        >
                           {alert.type}
                         </Badge>
                       </div>

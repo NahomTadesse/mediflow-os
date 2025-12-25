@@ -9,7 +9,7 @@ import {
   Eye,
   Edit,
   FileText,
-  Bell,
+  AlertCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -87,17 +87,17 @@ export default function MedicalRecords() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
       <div className="pt-16 lg:pt-0 p-3 sm:p-4 md:p-6">
         <div className="max-w-7xl mx-auto">
-          {/* Header */}
+          {/* Desktop Header */}
           <header className="hidden lg:block mb-4 sm:mb-6 md:mb-8">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
                   Medical Records
                 </h1>
-                <p className="text-sm sm:text-base text-gray-600 mt-1">
+                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 mt-1">
                   Centralized electronic health records management
                 </p>
               </div>
@@ -108,10 +108,10 @@ export default function MedicalRecords() {
           <header className="lg:hidden mb-4 sm:mb-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="pl-12 -mt-12">
-                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+                <h1 className="text-2xl sm:text-2xl font-bold text-gray-900 dark:text-white">
                   Medical Records
                 </h1>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
                   Centralized EHR management
                 </p>
               </div>
@@ -125,15 +125,18 @@ export default function MedicalRecords() {
               {/* Stats Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 {stats.map((stat) => (
-                  <Card key={stat.title}>
+                  <Card
+                    key={stat.title}
+                    className="dark:bg-gray-900 dark:border-gray-800"
+                  >
                     <CardContent className="p-4 sm:p-6">
-                      <p className="text-xs sm:text-sm font-medium text-gray-600">
+                      <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300">
                         {stat.title}
                       </p>
-                      <p className="text-xl sm:text-2xl font-bold mt-1 sm:mt-2">
+                      <p className="text-xl sm:text-2xl font-bold mt-1 sm:mt-2 dark:text-white">
                         {stat.value}
                       </p>
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                         {stat.change}
                       </p>
                     </CardContent>
@@ -141,28 +144,33 @@ export default function MedicalRecords() {
                 ))}
               </div>
 
-              {/* Search & Table */}
-              <Card>
+              {/* Search & Records Table */}
+              <Card className="dark:bg-gray-900 dark:border-gray-800">
                 <CardHeader className="pb-4">
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <div className="relative flex-1">
-                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                      <Input
-                        placeholder="Search by patient name, ID, or record number..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-10"
-                      />
-                    </div>
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm">
-                        <Download className="h-4 w-4 mr-2" />
-                        Export
-                      </Button>
-                      <Button size="sm">
-                        <Plus className="h-4 w-4 mr-2" />
-                        New Record
-                      </Button>
+                  <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+                    <CardTitle className="text-base sm:text-lg dark:text-white">
+                      Medical Records
+                    </CardTitle>
+                    <div className="flex w-full sm:w-auto gap-3">
+                      <div className="relative flex-1 sm:flex-initial">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                        <Input
+                          placeholder="Search by name, ID, or record..."
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          className="pl-10 w-full sm:w-64 dark:bg-gray-800 dark:border-gray-700"
+                        />
+                      </div>
+                      <div className="flex gap-2">
+                        <Button variant="outline">
+                          <Download className="h-4 w-4 mr-2" />
+                          Export
+                        </Button>
+                        <Button>
+                          <Plus className="h-4 w-4 mr-2" />
+                          New Record
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </CardHeader>
@@ -179,58 +187,76 @@ export default function MedicalRecords() {
                           </TableHead>
                           <TableHead>Date</TableHead>
                           <TableHead className="hidden lg:table-cell">
-                            Diagnosis
+                            Status
                           </TableHead>
-                          <TableHead>Status</TableHead>
                           <TableHead>Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {filteredRecords.map((record) => (
-                          <TableRow key={record.id}>
-                            <TableCell className="font-medium">
+                          <TableRow
+                            key={record.id}
+                            className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                          >
+                            <TableCell className="font-medium dark:text-white">
                               {record.id}
                             </TableCell>
                             <TableCell>
                               <div>
-                                <div className="font-medium">
+                                <div className="font-medium dark:text-white">
                                   {record.patientName}
                                 </div>
-                                <div className="text-xs text-gray-500">
+                                <div className="text-xs text-gray-500 dark:text-gray-400">
                                   {record.patientId}
                                 </div>
                               </div>
                             </TableCell>
                             <TableCell>
-                              <Badge variant="outline">{record.type}</Badge>
+                              <Badge
+                                variant="outline"
+                                className="dark:border-gray-700"
+                              >
+                                {record.type}
+                              </Badge>
                             </TableCell>
-                            <TableCell className="hidden sm:table-cell">
+                            <TableCell className="hidden sm:table-cell dark:text-white">
                               {record.doctor}
                             </TableCell>
-                            <TableCell>{record.date}</TableCell>
-                            <TableCell className="hidden lg:table-cell">
-                              N/A
+                            <TableCell className="dark:text-white">
+                              {record.date}
                             </TableCell>
-                            <TableCell>
+                            <TableCell className="hidden lg:table-cell">
                               <Badge
-                                variant={
+                                className={`text-xs ${
                                   record.status === "Active"
-                                    ? "default"
-                                    : "secondary"
-                                }
+                                    ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                                    : "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                                }`}
                               >
                                 {record.status}
                               </Badge>
                             </TableCell>
                             <TableCell>
                               <div className="flex gap-1">
-                                <Button size="icon" variant="ghost">
+                                <Button
+                                  size="icon"
+                                  variant="ghost"
+                                  className="dark:hover:bg-gray-700"
+                                >
                                   <Eye className="h-4 w-4" />
                                 </Button>
-                                <Button size="icon" variant="ghost">
+                                <Button
+                                  size="icon"
+                                  variant="ghost"
+                                  className="dark:hover:bg-gray-700"
+                                >
                                   <Edit className="h-4 w-4" />
                                 </Button>
-                                <Button size="icon" variant="ghost">
+                                <Button
+                                  size="icon"
+                                  variant="ghost"
+                                  className="dark:hover:bg-gray-700"
+                                >
                                   <FileText className="h-4 w-4" />
                                 </Button>
                               </div>
@@ -244,13 +270,12 @@ export default function MedicalRecords() {
               </Card>
             </div>
 
-            {/* Right Column - Only Recent Alerts */}
+            {/* Right Column - Recent Alerts */}
             <div className="space-y-4 sm:space-y-6">
-              {/* Recent Alerts */}
-              <Card>
+              <Card className="dark:bg-gray-900 dark:border-gray-800">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-base sm:text-lg flex items-center gap-2">
-                    <Bell className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <CardTitle className="text-base sm:text-lg flex items-center gap-2 dark:text-white">
+                    <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5" />
                     Recent Alerts
                   </CardTitle>
                 </CardHeader>
@@ -259,15 +284,25 @@ export default function MedicalRecords() {
                     {recentAlerts.map((alert, index) => (
                       <div
                         key={index}
-                        className="flex items-center justify-between p-2 hover:bg-gray-50 rounded-lg"
+                        className="flex items-center justify-between p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
                       >
                         <div>
-                          <p className="text-xs sm:text-sm font-medium">
+                          <p className="text-xs sm:text-sm font-medium dark:text-white">
                             {alert.title}
                           </p>
-                          <p className="text-xs text-gray-500">{alert.time}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            {alert.time}
+                          </p>
                         </div>
-                        <Badge variant={alert.type as any} className="text-xs">
+                        <Badge
+                          className={`text-xs ${
+                            alert.type === "success"
+                              ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                              : alert.type === "warning"
+                              ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
+                              : "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                          }`}
+                        >
                           {alert.type}
                         </Badge>
                       </div>
