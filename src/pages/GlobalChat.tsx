@@ -160,7 +160,7 @@ export default function GlobalChat() {
         aria-label="Open MedCare Assistant"
       >
         {isOpen ? (
-          <X className={isMobile ? "w-6 h-6" : "w-8 h-8"} />
+          <X className={isMobile ? "w-4 h-4" : "w-6 h6"} />
         ) : (
           <>
             <MessageCircle className={isMobile ? "w-6 h-6" : "w-8 h-8"} />
